@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <queue>
 #include "GameObject.h"
 
 class Pool {
@@ -7,5 +7,5 @@ public:
     Pool(int poolSize, GameObject* gameObject);
     GameObject* PoolGetObject();
     void PoolReleaseObject(GameObject* gameObject);
-    std::vector<GameObject*> ObjectPool;
+    std::queue<GameObject*> ObjectPool;
 };

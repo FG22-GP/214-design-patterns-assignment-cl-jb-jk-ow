@@ -1,21 +1,20 @@
 #include "Pool.h"
 
 Pool::Pool(int poolSize, GameObject* gameObject) {
-    for(int i = 0; i < poolSize; i++) {
+    for (int i = 0; i < poolSize; i++) {
         gameObject = new GameObject;
-        ObjectPool.push_back(gameObject);
+        ObjectPool.push(gameObject);
     }
 }
 
 GameObject* Pool::PoolGetObject() {
-    for (auto GameObject : ObjectPool) {
-        if(GameObject->isActive) continue;
-        return GameObject;
+    if (!ObjectPool.empty()) {
+        GameObject* FrontObj = ObjectPool.front();
+        ObjectPool.pop();
+        return FrontObj;
     }
-    printf("No objects left in pool :(");
-    return nullptr;
 }
 
 void Pool::PoolReleaseObject(GameObject* gameObject) {
-    
+    ObjectPool.push(gameObject);
 }
