@@ -14,6 +14,8 @@
 
 #include "Window/Window.h"
 
+using namespace std;
+
 void InitializeSDL()
 {
 	// initialize SDL_Image for image loading
@@ -89,8 +91,12 @@ int main(int argc, char* args[])
 
                 case SDL_MOUSEBUTTONDOWN: {
                     // Handle mouse button down event
-                    std::vector<int> mousePosition = inputManager.OnMouseClick();
-                    // Use mousePosition[0] and mousePosition[1] for X and Y coordinates
+                   inputManager.OnMouseButtonPress(e.button.button);
+                } break;
+
+                case SDL_MOUSEBUTTONUP: {
+                    // Handle mouse button down event
+                    inputManager.OnMouseButtonRelease(e.button.button);
                 } break;
             }
         }
@@ -106,7 +112,8 @@ int main(int argc, char* args[])
         // Check for mouse clicks
         if (inputManager.IsMouseButtonPressed(SDL_BUTTON_LEFT)) {
             // Handle left mouse button click at inputManager.GetMouseX(), inputManager.GetMouseY()
-            printf("Left mouse button is pressed at (%d, %d)\n", inputManager.GetMouseX(), inputManager.GetMouseY());
+            printf("Left mouse button is pressed at (%d, %d)\n", inputManager.GetClickPos()[0], inputManager.GetClickPos()[1]);
+
         }
 
         // Clear the renderer

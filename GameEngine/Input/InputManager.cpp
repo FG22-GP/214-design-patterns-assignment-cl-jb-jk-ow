@@ -1,5 +1,7 @@
 #include "InputManager.h"
 
+using namespace std;
+
 InputManager::InputManager() {
     // Initialize key states
     keyStates = SDL_GetKeyboardState(nullptr);
@@ -7,6 +9,10 @@ InputManager::InputManager() {
     // Initialize mouse position
     mouseX = 0;
     mouseY = 0;
+
+    // Initialize click pos outside game window
+    clickX = -1;
+    clickY = -1;
 }
 
 InputManager::~InputManager() = default;
@@ -35,17 +41,35 @@ int InputManager::GetMouseY() const {
     return mouseY;
 }
 
-std::vector<int> InputManager::OnMouseClick() const {
-    // Return a vector with mouse X and Y position
+vector<int> InputManager::GetMousePos() const {
     return {mouseX, mouseY};
 }
 
+vector<int> InputManager::GetClickPos() const
+{
+    return {clickX, clickY};
+}
+
+void InputManager::OnMouseButtonPress(Uint8 button)
+{
+    pressedMouseButtons[button] = true;
+    // Set click pos once
+    clickX = mouseX;
+    clickY = mouseY;
+}
+
+void InputManager::OnMouseButtonRelease(Uint8 button)
+{
+    pressedMouseButtons[button] = false;
+    // Reset click pos so that it's not used without user input
+    clickX = -1;
+    clickY = -1;
+}
+
 void InputManager::OnKeyPress(SDL_Scancode key) {
-    // Set the key as pressed
     pressedKeys[key] = true;
 }
 
 void InputManager::OnKeyRelease(SDL_Scancode key) {
-    // Set the key as released
     pressedKeys[key] = false;
 }

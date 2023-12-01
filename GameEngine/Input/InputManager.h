@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <vector>
 
+using namespace std;
+
 class InputManager {
 public:
     // Constructor
@@ -27,8 +29,12 @@ public:
     // Get the Y position of the mouse
     int GetMouseY() const;
 
-    // Handle mouse click
-    std::vector<int> OnMouseClick() const;
+    // Get current mouse position
+    vector<int> GetMousePos() const;
+
+    //Get position of click
+    //Will only return valid values if left click is pressed
+    vector<int> GetClickPos() const;
 
     // Handle key press
     void OnKeyPress(SDL_Scancode key);
@@ -36,9 +42,17 @@ public:
     // Handle key release
     void OnKeyRelease(SDL_Scancode key);
 
+    // Handle mouse button press
+    void OnMouseButtonPress(Uint8 button);
+
+    // Handle mouse button release
+    void OnMouseButtonRelease(Uint8 button);
+
 private:
     const Uint8* keyStates;  // Array of current key states
     int mouseX, mouseY;      // Current mouse position
-    std::unordered_map<SDL_Scancode, bool> pressedKeys;  // Hashset to store pressed keys
+    int clickX, clickY;      // Coords of last click
+    unordered_map<SDL_Scancode, bool> pressedKeys;  // Hashset to store pressed keys
+    unordered_map<Uint8, bool> pressedMouseButtons; // Hashset to store pressed mouse buttons
 };
 
