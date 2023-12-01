@@ -10,6 +10,7 @@
 #include "Utilities/ImageURLs.h"
 #include "Utilities/FontURLs.h"
 #include "Input/InputManager.h"
+#include "Utilities/Pool.h"
 
 #include "Window/Window.h"
 
@@ -48,6 +49,12 @@ int main(int argc, char* args[])
 
     // Create Hello Text
     Text* helloText = new Text(FONT_LAZY_URL, 100, WHITE, "hello", gameWindow->renderer);
+
+    // Create pool
+    Image* feedbackImage = new Image(100, 100, IMG_CUBE_URL, gameWindow->renderer);
+    Pool* clickFeedbackPool = new Pool(128, feedbackImage);
+    //GameObject* gameObject = clickFeedbackPool->PoolGetObject();
+    // TODO: Add all game objects to an array so that they can be rendered.
 
     // Create InputManager
     InputManager inputManager;
