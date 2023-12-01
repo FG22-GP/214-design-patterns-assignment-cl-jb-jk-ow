@@ -2,15 +2,23 @@
 
 #include <SDL_render.h>
 
-class Image
+#include "../Utilities/GameObject.h"
+
+class Image : public GameObject
 {
+private:
+    SDL_Renderer* Renderer;
 public:
     Image(int width, int height, const char* newImageURL, SDL_Renderer* renderer);
-
+    
     void SetPosition(int x, int y);
     
     SDL_Texture* imageTexture;
     SDL_Rect* imageRect;
+
+    void SetColor(SDL_Color Color) override;
+    void SetTexture(const char* ImgUrl) override;
+    
 
 protected:
     int imageWidth, imageHeight;

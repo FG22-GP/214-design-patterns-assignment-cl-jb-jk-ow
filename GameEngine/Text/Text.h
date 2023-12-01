@@ -2,7 +2,9 @@
 
 #include <SDL_ttf.h>
 
-class Text
+#include "../Utilities/GameObject.h"
+
+class Text : public GameObject
 {
 public:
     Text(const char* fontURL, int fontSize, SDL_Color textColor, const char* text, SDL_Renderer* renderer);

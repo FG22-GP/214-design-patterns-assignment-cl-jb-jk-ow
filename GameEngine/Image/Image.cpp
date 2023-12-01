@@ -1,21 +1,15 @@
 #include "Image.h"
 #include "../Utilities/Consts.h"
-
 #include <SDL_image.h>
+#include "../Utilities/ImageURLs.h"
 
 Image::Image(int width, int height, const char* newImageURL, SDL_Renderer* renderer)
 {
+    Renderer = renderer;
     imageWidth = width;
     imageHeight = height;
-    
-    //Load image at specified path
-    SDL_Surface* loadedSurface = IMG_Load(newImageURL);
-    
-    //Convert surface to screen format
-    imageTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
 
-    //Get rid of old loaded surface
-    SDL_FreeSurface(loadedSurface);
+    Image::SetTexture(newImageURL);
 
     //Create image rect
     imageRect = new SDL_Rect{
@@ -29,4 +23,16 @@ void Image::SetPosition(int x, int y)
 {
     imageRect->x = x;
     imageRect->y = y;
+}
+
+void Image::SetColor(SDL_Color Color) {
+    GameObject::SetColor(Color);
+    SDL_SetTextureColorMod(imageTexture, Color.r, Color.g, Color.b);
+}
+
+void Image::SetTexture(const char* ImgUrl) {
+    GameObject::SetTexture(ImgUrl);
+    SDL_Surface* loadedSurface = IMG_Load(ImgUrl);
+    imageTexture = SDL_CreateTextureFromSurface(Renderer, loadedSurface);
+    SDL_FreeSurface(loadedSurface);
 }

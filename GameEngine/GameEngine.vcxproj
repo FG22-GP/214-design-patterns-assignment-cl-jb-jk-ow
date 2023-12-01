@@ -31,6 +31,8 @@
     <ClCompile Include="Text\Text.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Image\Image.cpp" />
+    <ClCompile Include="Utilities\GameObject.cpp" />
+    <ClCompile Include="Utilities\Pool.cpp" />
     <ClCompile Include="Window\Window.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -121,7 +123,9 @@
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Image\Image.h" />
     <ClInclude Include="Utilities\Consts.h" />
+    <ClInclude Include="Utilities\GameObject.h" />
     <ClInclude Include="Utilities\ImageURLs.h" />
+    <ClInclude Include="Utilities\Pool.h" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
