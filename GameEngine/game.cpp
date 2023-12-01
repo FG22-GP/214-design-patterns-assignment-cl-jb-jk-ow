@@ -110,7 +110,7 @@ int main(int argc, char* args[])
         gameWindow->Present();
 
         // Can be used to wait for a certain amount of ms
-        SDL_Delay(0);
+        SDL_Delay(REFRESH_RATE);
     }
 
     return 0;
