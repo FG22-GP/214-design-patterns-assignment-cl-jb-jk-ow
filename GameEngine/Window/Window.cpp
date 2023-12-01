@@ -2,7 +2,7 @@
 #include <SDL_hints.h>
 
 //Constructor
-Window::Window(int width, int height/*, IImageLoader* imageLoader*/)
+Window::Window(int width, int height, SDL_Color windowColor)
 {
     //Create Window and Renderer
     SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE, &window, &renderer);
@@ -16,7 +16,7 @@ Window::Window(int width, int height/*, IImageLoader* imageLoader*/)
     SDL_RenderSetLogicalSize(renderer, width, height);
 
     //Sets window background color
-    SDL_SetRenderDrawColor(renderer, 120, 60, 255, 255);
+    SDL_SetRenderDrawColor(renderer, windowColor.r, windowColor.g, windowColor.b, windowColor.a);
 }
 
 //Deconstructor

@@ -20,7 +20,7 @@ class Window
 	// Dependencies to Renderer & Image Loader
 	IImageLoader* imageLoader;
 public:
-	Window(int width, int height/*, IImageLoader* imageLoader*/);
+	Window(int width, int height, SDL_Color windowColor);
 	~Window();
 
 	SDL_Renderer* renderer;
