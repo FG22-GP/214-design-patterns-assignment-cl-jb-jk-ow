@@ -8,11 +8,11 @@ Pool::Pool(int poolSize, GameObject* gameObject) {
 }
 
 GameObject* Pool::PoolGetObject() {
-    if (!ObjectPool.empty()) {
-        GameObject* FrontObj = ObjectPool.front();
-        ObjectPool.pop();
-        return FrontObj;
-    }
+    if (ObjectPool.empty()) return nullptr;
+
+    GameObject* FrontObj = ObjectPool.front();
+    ObjectPool.pop();
+    return FrontObj;
 }
 
 void Pool::PoolReleaseObject(GameObject* gameObject) {
