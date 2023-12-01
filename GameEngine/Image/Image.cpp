@@ -9,7 +9,7 @@ Image::Image(int width, int height, const char* newImageURL, SDL_Renderer* rende
     imageWidth = width;
     imageHeight = height;
 
-    Image::SetTexture(newImageURL);
+    SetTexture(newImageURL);
 
     //Create image rect
     imageRect = new SDL_Rect{
@@ -26,12 +26,10 @@ void Image::SetPosition(int x, int y)
 }
 
 void Image::SetColor(SDL_Color Color) {
-    GameObject::SetColor(Color);
     SDL_SetTextureColorMod(imageTexture, Color.r, Color.g, Color.b);
 }
 
 void Image::SetTexture(const char* ImgUrl) {
-    GameObject::SetTexture(ImgUrl);
     SDL_Surface* loadedSurface = IMG_Load(ImgUrl);
     imageTexture = SDL_CreateTextureFromSurface(Renderer, loadedSurface);
     SDL_FreeSurface(loadedSurface);
