@@ -40,10 +40,11 @@ int main(int argc, char* args[])
     InitializeSDL();
 
     // Create Window and Renderer
-    Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, PINK);
+    Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE);
 
     // Create Pikachu Image
-    Image* pikachuImage = new Image(200, 200, IMG_PIKACHU_URL, gameWindow->renderer);
+    Image* cubeImage = new Image(400, 400, IMG_CUBE_URL, gameWindow->renderer);
+    Image* backgroundFogImage = new Image(WINDOW_WIDTH, WINDOW_HEIGHT, IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
 
     // Create Hello Text
     Text* helloText = new Text(FONT_LAZY_URL, 100, WHITE, "hello", gameWindow->renderer);
@@ -104,7 +105,8 @@ int main(int argc, char* args[])
         // Clear the renderer
         gameWindow->Clear();
 
-        gameWindow->Render(pikachuImage, 400, 250);
+        gameWindow->Render(backgroundFogImage, 0, 0);
+        gameWindow->Render(cubeImage, 50, WINDOW_CENTER_Y - 200);
         gameWindow->Render(helloText, WINDOW_CENTER_X, 125);
 
         gameWindow->Present();
