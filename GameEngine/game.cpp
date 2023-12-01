@@ -3,11 +3,13 @@
 #include <stdio.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <vector>
 
-#include "Text\Text.h"
+#include "Text/Text.h"
 #include "Utilities/Consts.h"
 #include "Utilities/ImageURLs.h"
-#include"Utilities/FontURLs.h"
+#include "Utilities/FontURLs.h"
+#include "Input/InputManager.h"
 
 #include "Window/Window.h"
 
@@ -35,76 +37,81 @@ void InitializeSDL()
 
 int main(int argc, char* args[])
 {
-	InitializeSDL();
+    InitializeSDL();
 
-	// Create Window and Renderer
-	Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT);
+    // Create Window and Renderer
+    Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	//Create Pikachu Image
-	Image* pikachuImage = new Image(200, 200, IMG_PIKACHU_URL, gameWindow->renderer);
+    // Create Pikachu Image
+    Image* pikachuImage = new Image(200, 200, IMG_PIKACHU_URL, gameWindow->renderer);
 
-	//Create Hello Text
-	Text* helloText = new Text(FONT_LAZY_URL, 100, WHITE, "hello", gameWindow->renderer);
+    // Create Hello Text
+    Text* helloText = new Text(FONT_LAZY_URL, 100, WHITE, "hello", gameWindow->renderer);
 
-	SDL_Event e; bool quit = false;
+    // Create InputManager
+    InputManager inputManager;
 
-	//*
-	//Game Loop (runs until quit)
-	//*
-	while (quit == false)
-	{
-		//Can be used, to see, how much time in ms has passed since app start
-		SDL_GetTicks();
+    SDL_Event e;
+    bool quit = false;
 
-		//Loop through all pending events from Windows (OS)
-		while (SDL_PollEvent(&e))
-		{
-			//Check, if it's an event we want to react to:
-			switch (e.type) {
-				case SDL_QUIT: {
-					quit = true;
-				} break;
+    // Game Loop (runs until quit)
+    while (!quit)
+    {
+        // Can be used, to see, how much time in ms has passed since app start
+        SDL_GetTicks();
 
-				/*
-				
-					// This is an example on how to use input events:
-				case SDL_KEYDOWN: {
-					// input example: if left, then make pikachu move left
-					if (e.key.keysym.sym == SDLK_LEFT) {
-						pikachuMoveRight = false;
-					}
-					// if right, then make pikachu move right
-					if (e.key.keysym.sym == SDLK_RIGHT) {
-						pikachuMoveRight = true;
-					}
-				} break;
+        // Loop through all pending events from Windows (OS)
+        while (SDL_PollEvent(&e))
+        {
+            // Check, if it's an event we want to react to:
+            switch (e.type) {
+                case SDL_QUIT: {
+                    quit = true;
+                } break;
 
-				*/
-			} 
-		}
+                case SDL_KEYDOWN: {
+                    // Handle key press event
+                    inputManager.OnKeyPress(e.key.keysym.scancode);
+                } break;
 
-		/*
-		// This is an example for how to check, whether keys are currently pressed:
-		const Uint8* keystate = SDL_GetKeyboardState(NULL);
-		if (keystate[SDL_SCANCODE_UP])
-		{
-			
-		}
-		if (keystate[SDL_SCANCODE_DOWN])
-		{
-			
-		}
-		*/
-		gameWindow->Clear();
-		
-		gameWindow->Render(pikachuImage, 400, 250);
-		gameWindow->Render(helloText, WINDOW_CENTER_X, 125);
+                case SDL_KEYUP: {
+                    // Handle key release event
+                    inputManager.OnKeyRelease(e.key.keysym.scancode);
+                } break;
 
-		gameWindow->Present();
+                case SDL_MOUSEBUTTONDOWN: {
+                    // Handle mouse button down event
+                    std::vector<int> mousePosition = inputManager.OnMouseClick();
+                    // Use mousePosition[0] and mousePosition[1] for X and Y coordinates
+                } break;
+            }
+        }
 
-		//Can be used to wait for a certain amount of ms
-		SDL_Delay(0);
-	}
+        // Update input manager
+        inputManager.Update();
 
-	return 0;
+        // Check for key presses
+        if (inputManager.IsKeyPressed(SDL_SCANCODE_A)) {
+            printf("'A' key is pressed\n");
+        }
+
+        // Check for mouse clicks
+        if (inputManager.IsMouseButtonPressed(SDL_BUTTON_LEFT)) {
+            // Handle left mouse button click at inputManager.GetMouseX(), inputManager.GetMouseY()
+            printf("Left mouse button is pressed at (%d, %d)\n", inputManager.GetMouseX(), inputManager.GetMouseY());
+        }
+
+        // Clear the renderer
+        gameWindow->Clear();
+
+        gameWindow->Render(pikachuImage, 400, 250);
+        gameWindow->Render(helloText, WINDOW_CENTER_X, 125);
+
+        gameWindow->Present();
+
+        // Can be used to wait for a certain amount of ms
+        SDL_Delay(0);
+    }
+
+    return 0;
 }

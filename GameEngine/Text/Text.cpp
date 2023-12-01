@@ -1,5 +1,5 @@
 #include "Text.h"
-#include "..\Utilities/Consts.h"
+#include "../Utilities/Consts.h"
 
 Text::Text(const char* fontURL, int fontSize, SDL_Color textColor, const char* text, SDL_Renderer* renderer)
 {

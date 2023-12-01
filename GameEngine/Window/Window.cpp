@@ -20,9 +20,7 @@ Window::Window(int width, int height/*, IImageLoader* imageLoader*/)
 }
 
 //Deconstructor
-Window::~Window()
-{
-}
+Window::~Window() = default;
 
 void Window::Render(Image* image, int x, int y)
 {

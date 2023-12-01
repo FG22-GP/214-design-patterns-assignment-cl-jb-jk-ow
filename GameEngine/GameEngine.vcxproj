@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Text\Text.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Image\Image.cpp" />
@@ -116,6 +117,7 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Image\Image.h" />
     <ClInclude Include="Utilities\Consts.h" />

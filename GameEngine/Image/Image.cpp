@@ -1,5 +1,5 @@
 #include "Image.h"
-#include "..\Utilities/Consts.h"
+#include "../Utilities/Consts.h"
 
 #include <SDL_image.h>
 

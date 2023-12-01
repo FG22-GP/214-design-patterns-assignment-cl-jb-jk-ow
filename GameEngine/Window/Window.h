@@ -1,6 +1,6 @@
 #pragma once
-#include "..\Image\Image.h"
-#include "..\Text\Text.h"
+#include "../Image/Image.h"
+#include "../Text/Text.h"
 #include <SDL_render.h>
 #include <memory>
 
