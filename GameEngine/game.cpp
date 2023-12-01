@@ -40,7 +40,7 @@ int main(int argc, char* args[])
     InitializeSDL();
 
     // Create Window and Renderer
-    Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT);
+    Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, PINK);
 
     // Create Pikachu Image
     Image* pikachuImage = new Image(200, 200, IMG_PIKACHU_URL, gameWindow->renderer);

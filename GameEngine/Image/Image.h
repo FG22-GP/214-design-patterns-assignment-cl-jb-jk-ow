@@ -16,8 +16,8 @@ public:
     SDL_Texture* imageTexture;
     SDL_Rect* imageRect;
 
-    void SetColor(SDL_Color Color) override;
-    void SetTexture(const char* ImgUrl) override;
+    void SetColor(SDL_Color Color);
+    void SetTexture(const char* ImgUrl);
     
 
 protected:

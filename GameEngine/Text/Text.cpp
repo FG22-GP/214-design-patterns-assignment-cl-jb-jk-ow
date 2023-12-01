@@ -1,13 +1,40 @@
 #include "Text.h"
 #include "../Utilities/Consts.h"
 
-Text::Text(const char* fontURL, int fontSize, SDL_Color textColor, const char* text, SDL_Renderer* renderer)
+Text::Text(const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer)
 {
     // load font
-    auto font = TTF_OpenFont(fontURL, fontSize);
+    renderer = newRenderer;
+    color = textColor;
+    text = newText;
+    fontSize = newFontSize;
+    font = TTF_OpenFont(fontURL, newFontSize);
 
+    RefreshText();
+}
+
+void Text::SetPosition(int x, int y)
+{
+    textRect->x = x;
+    textRect->y = y;
+}
+
+void Text::SetColor(SDL_Color Color)
+{
+    color = Color;
+    RefreshText();
+}
+
+void Text::SetText(const char* NewText)
+{
+    text = NewText;
+    RefreshText();
+}
+
+void Text::RefreshText()
+{
     // render the text into an unoptimized CPU surface
-    textSurface = TTF_RenderText_Solid(font, text, textColor);
+    textSurface = TTF_RenderText_Solid(font, text, color);
     int textWidth, textHeight;
     
     // Create texture GPU-stored texture from surface pixels
@@ -26,10 +53,4 @@ Text::Text(const char* fontURL, int fontSize, SDL_Color textColor, const char* t
         WINDOW_CENTER_Y - (height / 2),
         width,
         height};
-}
-
-void Text::SetPosition(int x, int y)
-{
-    textRect->x = x;
-    textRect->y = y;
 }
