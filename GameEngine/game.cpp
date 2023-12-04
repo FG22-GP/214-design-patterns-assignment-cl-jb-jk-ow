@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <string>
 #include <vector>
 
 #include "Text/Text.h"
@@ -11,6 +12,7 @@
 #include "Utilities/FontURLs.h"
 #include "Input/InputManager.h"
 #include "Utilities/Pool.h"
+#include "Utilities/Intersection.h"
 
 #include "Window/Window.h"
 
@@ -42,15 +44,19 @@ int main(int argc, char* args[])
 {
     InitializeSDL();
 
+    // Gameplay Variables
+    int cubeCount = 0;
+    
     // Create Window and Renderer
     Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE);
 
-    // Create Pikachu Image
+    // Create Images
     Image* cubeImage = new Image(400, 400, IMG_CUBE_URL, gameWindow->renderer);
+    Image* currencyCubeImage = new Image(70, 70, IMG_SMALLCUBE_URL, gameWindow->renderer);
     Image* backgroundFogImage = new Image(WINDOW_WIDTH, WINDOW_HEIGHT, IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
 
-    // Create Hello Text
-    Text* helloText = new Text(FONT_LAZY_URL, 100, WHITE, "hello", gameWindow->renderer);
+    // Create Currency Text
+    Text* currencyText = new Text(FONT_FUTURAMEDIUM_URL, 40, WHITE, std::to_string(cubeCount).c_str(), gameWindow->renderer);
 
     // Create pool
     Image* feedbackImage = new Image(100, 100, IMG_CUBE_URL, gameWindow->renderer);
@@ -114,14 +120,21 @@ int main(int argc, char* args[])
             // Handle left mouse button click at inputManager.GetMouseX(), inputManager.GetMouseY()
             printf("Left mouse button is pressed at (%d, %d)\n", inputManager.GetClickPos()[0], inputManager.GetClickPos()[1]);
 
+            if(Intersection::IntersectionMouseRect(cubeImage->imageRect, inputManager.GetClickPos()))
+            {
+                cubeCount++;
+            }
         }
 
+        currencyText->SetText(std::to_string(cubeCount).c_str());
+        
         // Clear the renderer
         gameWindow->Clear();
 
         gameWindow->Render(backgroundFogImage, 0, 0);
+        gameWindow->Render(currencyCubeImage, 15, 15);
         gameWindow->Render(cubeImage, 50, WINDOW_CENTER_Y - 200);
-        gameWindow->Render(helloText, WINDOW_CENTER_X, 125);
+        gameWindow->Render(currencyText, 100, 25);
 
         gameWindow->Present();
 
