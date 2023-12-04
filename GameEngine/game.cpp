@@ -53,10 +53,13 @@ int main(int argc, char* args[])
     // Create Images
     Image* cubeImage = new Image(400, 400, IMG_CUBE_URL, gameWindow->renderer);
     Image* currencyCubeImage = new Image(70, 70, IMG_SMALLCUBE_URL, gameWindow->renderer);
+    Image* cpsCubeImage = new Image(45, 45, IMG_SMALLCUBE_URL, gameWindow->renderer);
+    Image* squareMartBackgroundImage = new Image(250, 800, IMG_SQUAREMART_URL, gameWindow->renderer);
     Image* backgroundFogImage = new Image(WINDOW_WIDTH, WINDOW_HEIGHT, IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
 
-    // Create Currency Text
+    // Create Texts
     Text* currencyText = new Text(FONT_FUTURAMEDIUM_URL, 40, WHITE, std::to_string(cubeCount).c_str(), gameWindow->renderer);
+    Text* cpsText = new Text(FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer);
 
     // Create pool
     Image* feedbackImage = new Image(100, 100, IMG_CUBE_URL, gameWindow->renderer);
@@ -127,15 +130,25 @@ int main(int argc, char* args[])
         }
 
         currencyText->SetText(std::to_string(cubeCount).c_str());
+
+        //TODO: properly calculate CPS
+        int currentCps = cubeCount / 2;
+        cpsText->SetText(std::to_string(currentCps).append("/cps").c_str());
         
         // Clear the renderer
         gameWindow->Clear();
 
+        //Image rendering
         gameWindow->Render(backgroundFogImage, 0, 0);
         gameWindow->Render(currencyCubeImage, 15, 15);
-        gameWindow->Render(cubeImage, 50, WINDOW_CENTER_Y - 200);
-        gameWindow->Render(currencyText, 100, 25);
+        gameWindow->Render(cpsCubeImage, 300, 590);
+        gameWindow->Render(cubeImage, 180, WINDOW_CENTER_Y - 200);
+        gameWindow->Render(squareMartBackgroundImage, 780, -10);
 
+        //Text rendering
+        gameWindow->Render(currencyText, 100, 25);
+        gameWindow->Render(cpsText, 350, 595);
+        
         gameWindow->Present();
 
         // Can be used to wait for a certain amount of ms
