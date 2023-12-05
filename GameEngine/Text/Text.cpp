@@ -1,8 +1,7 @@
 #include "Text.h"
 #include "../Utilities/Consts.h"
 
-Text::Text(const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer):
-    GameObject(this->CurrentTransform) {
+Text::Text(Vector2 position, const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer) : GameObject(Transform(position)) {
     // load font
     renderer = newRenderer;
     color = textColor;
@@ -11,12 +10,6 @@ Text::Text(const char* fontURL, int newFontSize, SDL_Color textColor, const char
     font = TTF_OpenFont(fontURL, newFontSize);
 
     RefreshText();
-}
-
-void Text::SetPosition(int x, int y)
-{
-    textRect->x = x;
-    textRect->y = y;
 }
 
 void Text::SetColor(SDL_Color Color)
@@ -38,19 +31,20 @@ void Text::RefreshText()
     int textWidth, textHeight;
     
     // Create texture GPU-stored texture from surface pixels
-    textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    Texture = SDL_CreateTextureFromSurface(renderer, textSurface);
     
-    // Get image dimensions
+    // Get dimensions
     auto width = textSurface->w;
     auto height = textSurface->h;
     
     //Get rid of old loaded surface
     SDL_FreeSurface(textSurface);
 
-    //Create image rect
-    textRect = new SDL_Rect{
-        WINDOW_CENTER_X - (width / 2),
-        WINDOW_CENTER_Y - (height / 2),
+    //Create rect
+    Rect = new SDL_Rect{
+        CurrentTransform.Position.X,
+        CurrentTransform.Position.Y,
         width,
-        height};
+        height 
+    };
 }

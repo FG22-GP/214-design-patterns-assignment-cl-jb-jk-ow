@@ -22,16 +22,9 @@ Window::Window(int width, int height, SDL_Color windowColor)
 //Deconstructor
 Window::~Window() = default;
 
-void Window::Render(Image* image, int x, int y)
+void Window::Render(GameObject* gameObject)
 {
-    image->SetPosition(x, y);
-    SDL_RenderCopy(renderer, image->imageTexture, nullptr, image->imageRect);
-}
-
-void Window::Render(Text* text, int x, int y)
-{
-    text->SetPosition(x, y);
-    SDL_RenderCopy(renderer, text->textTexture, nullptr, text->textRect);
+    SDL_RenderCopy(renderer, gameObject->Texture, nullptr, gameObject->Rect);
 }
 
 void Window::Clear()

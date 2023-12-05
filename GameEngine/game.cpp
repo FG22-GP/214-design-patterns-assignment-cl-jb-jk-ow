@@ -54,22 +54,14 @@ int main(int argc, char* args[])
     // Create Window and Renderer
     Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE);
 
-    // Create Images
-    Image* cubeImage = new Image(400, 400, IMG_CUBE_URL, gameWindow->renderer);
-    Image* currencyCubeImage = new Image(70, 70, IMG_SMALLCUBE_URL, gameWindow->renderer);
-    Image* cpsCubeImage = new Image(45, 45, IMG_SMALLCUBE_URL, gameWindow->renderer);
-    Image* squareMartBackgroundImage = new Image(250, 800, IMG_SQUAREMART_URL, gameWindow->renderer);
-    Image* backgroundFogImage = new Image(WINDOW_WIDTH, WINDOW_HEIGHT, IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
-
-    // Create Texts
-    Text* currencyText = new Text(FONT_FUTURAMEDIUM_URL, 40, WHITE, std::to_string(cubeCount).c_str(), gameWindow->renderer);
-    Text* cpsText = new Text(FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer);
-
-    // Create pool
-    Image* feedbackImage = new Image(100, 100, IMG_CUBE_URL, gameWindow->renderer);
-    Pool* clickFeedbackPool = new Pool(128, feedbackImage);
-    //GameObject* gameObject = clickFeedbackPool->PoolGetObject();
-    // TODO: Add all game objects to an array so that they can be rendered.
+    // Create Game Objects
+    Image* cubeImage = new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer);
+    Image* currencyCubeImage = new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer);
+    Image* cpsCubeImage = new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer);
+    Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer);
+    Text* currencyText = new Text(Vector2(100, 25), FONT_FUTURAMEDIUM_URL, 40, WHITE, std::to_string(cubeCount).c_str(), gameWindow->renderer);
+    Text* cpsText = new Text(Vector2(350, 595), FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer);
+    Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
 
     // Create InputManager
     InputManager inputManager;
@@ -127,7 +119,7 @@ int main(int argc, char* args[])
             // Handle left mouse button click at inputManager.GetMouseX(), inputManager.GetMouseY()
             printf("Left mouse button is pressed at (%d, %d)\n", inputManager.GetClickPos()[0], inputManager.GetClickPos()[1]);
 
-            if(Intersection::IntersectionMouseRect(cubeImage->imageRect, inputManager.GetClickPos()))
+            if(Intersection::IntersectionMouseRect(cubeImage->Rect, inputManager.GetClickPos()))
             {
                 cubeCount++;
             }
@@ -138,20 +130,16 @@ int main(int argc, char* args[])
         //TODO: properly calculate CPS
         int currentCps = cubeCount / 2;
         cpsText->SetText(std::to_string(currentCps).append("/cps").c_str());
-        
+
         // Clear the renderer
         gameWindow->Clear();
 
-        //Image rendering
-        gameWindow->Render(backgroundFogImage, 0, 0);
-        gameWindow->Render(currencyCubeImage, 15, 15);
-        gameWindow->Render(cpsCubeImage, 300, 590);
-        gameWindow->Render(cubeImage, 180, WINDOW_CENTER_Y - 200);
-        gameWindow->Render(squareMartBackgroundImage, 780, -10);
+        // Rendering
 
-        //Text rendering
-        gameWindow->Render(currencyText, 100, 25);
-        gameWindow->Render(cpsText, 350, 595);
+        for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
+        {
+            gameWindow->Render(activeGameObject);
+        }
         
         gameWindow->Present();
 
