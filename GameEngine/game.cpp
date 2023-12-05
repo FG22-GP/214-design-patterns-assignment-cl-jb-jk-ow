@@ -14,6 +14,7 @@
 #include "Utilities/Pool.h"
 #include "Utilities/Intersection.h"
 #include "Utilities/Item.h"
+#include "Utilities/Shop.h"
 
 #include "Window/Window.h"
 
@@ -41,32 +42,48 @@ void InitializeSDL()
 	}
 }
 
+Item* CreateNewItem(const char* ItemName, int BaseValuePerSecond, int BaseCost, int CostMultiplierPerOwnedItem, Vector2 ItemRenderPosition, const char* ItemImageURL, Shop* ItemShop, SDL_Renderer* Renderer)
+{
+    Image* newImage = new Image(Transform(ItemRenderPosition, Vector2(100, 100)), ItemImageURL, Renderer);
+    Text* newCostText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 45), FONT_FUTURAMEDIUM_URL, 12, BLACK, "COSTS:", Renderer);
+    Text* newOwnedText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 25), FONT_FUTURAMEDIUM_URL, 12, BLACK, "OWNED:", Renderer);
+    Item* newItem = new Item(ItemName, BaseValuePerSecond, BaseCost, CostMultiplierPerOwnedItem, newCostText, newOwnedText);
+    Text* newNameText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y), FONT_FUTURAMEDIUM_URL, 15, BLACK, newItem->ItemName, Renderer);
+    newImage->SetItemReference(newItem);
+    ItemShop->AddNewShopItem(newItem);
+
+    return newItem;
+}
+
 int main(int argc, char* args[])
 {
     InitializeSDL();
 
+    //TODO: player stat manager thing instead?
     // Gameplay Variables
     int cubeCount = 0;
-
-    //TODO: make a item creator nice thingy THIS IS TEMP
+    float cpsTimer = 0;
     
     // Create Window and Renderer
     Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE);
 
     // Create Game Objects
-    //Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
-
-    Item* TestItem = new Item("Filbert", 1, 1, 1);
-    
+    Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
     Image* cubeImage = new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer);
-    cubeImage->SetItemReference(TestItem);
-    
-    
     Image* currencyCubeImage = new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer);
     Image* cpsCubeImage = new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer);
-    Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer);
     Text* currencyText = new Text(Vector2(100, 25), FONT_FUTURAMEDIUM_URL, 40, WHITE, std::to_string(cubeCount).c_str(), gameWindow->renderer);
     Text* cpsText = new Text(Vector2(350, 595), FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer);
+
+    //Create Shop & Items
+    Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer);
+    Shop* squareMart = new Shop();
+    
+    Item* item_SquarePants = CreateNewItem("Square Pants", 1, 10, 2, Vector2(800, 65), IMG_SQUAREPANTS_URL, squareMart, gameWindow->renderer);
+    Item* item_Squire = CreateNewItem("Squire", 5, 100, 2, Vector2(800, 175), IMG_SQUIRE_URL, squareMart, gameWindow->renderer);
+    Item* item_SquarePheonix = CreateNewItem("Square Pheonix", 25, 500, 3, Vector2(800, 285), IMG_SQUAREPHEONIX_URL, squareMart, gameWindow->renderer);
+    Item* item_SquareSpace = CreateNewItem("Square Space", 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->renderer);
+    Item* item_SquareSquared = CreateNewItem("Square Squared", 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->renderer);
 
     // Create InputManager
     InputManager inputManager;
@@ -123,17 +140,39 @@ int main(int argc, char* args[])
         if (inputManager.IsMouseButtonPressed(SDL_BUTTON_LEFT)) {
             // Handle left mouse button click at inputManager.GetMouseX(), inputManager.GetMouseY()
             printf("Left mouse button is pressed at (%d, %d)\n", inputManager.GetClickPos()[0], inputManager.GetClickPos()[1]);
-        
-            GameObject* ClickedItem = Intersection::GetClickedGameObject(GameObject::ActiveGameObjects, inputManager.GetClickPos());
-            if(ClickedItem && ClickedItem->Item != nullptr) {
-                ClickedItem->Item->BuyItem(1);
+
+            //If cube is clicked
+            if(Intersection::IntersectionMouseRect(cubeImage->Rect, inputManager.GetClickPos()))
+            {
+                cubeCount++;
+            }
+
+            //If any GameObject is clicked
+            Item* ClickedItem = Intersection::GetClickedItem(GameObject::ActiveGameObjects, inputManager.GetClickPos());
+            if(ClickedItem && ClickedItem != nullptr) {
+                if(cubeCount >= ClickedItem->GetItemCost())
+                {
+                    cubeCount -= ClickedItem->GetItemCost();
+                    ClickedItem->BuyItem(1);
+                }
             }
         }
 
         currencyText->SetText(std::to_string(cubeCount).c_str());
 
-        //TODO: properly calculate CPS
-        int currentCps = cubeCount / 2;
+        //Calculate CPS from items
+        int currentCps = 0;
+
+        for (auto& it: squareMart->ShopItemMap) {
+            currentCps += it.second->GetItemCps();
+        }
+
+        //Add cps to cubecount every second
+        if(cpsTimer >= 1000)
+        {
+            cpsTimer = 0;
+            cubeCount += currentCps;
+        }
         cpsText->SetText(std::to_string(currentCps).append("/cps").c_str());
 
         // Clear the renderer
@@ -148,6 +187,7 @@ int main(int argc, char* args[])
         
         gameWindow->Present();
 
+        cpsTimer += REFRESH_RATE;
         // Can be used to wait for a certain amount of ms
         SDL_Delay(REFRESH_RATE);
     }

@@ -18,3 +18,16 @@ GameObject* Intersection::GetClickedGameObject(std::vector<GameObject*>& gameobj
     }
     return nullptr;
 }
+
+Item* Intersection::GetClickedItem(std::vector<GameObject*>& gameobjects, std::vector<int> MousePos)
+{
+    for (GameObject* gameobject : gameobjects) {
+        if(gameobject->Item != nullptr)
+        {
+            if(IntersectionMouseRect(gameobject->Rect, MousePos)) {
+                return gameobject->Item;
+            }
+        }
+    }
+    return nullptr;
+}
