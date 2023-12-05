@@ -11,10 +11,15 @@ void SaveGameUtils::SaveGame(const GameState& gameState) {
     const std::string filename = "save.txt";
     fs::path filePath = fs::current_path() / filename;
     std::ofstream file(filePath);
-
+    
     if (file.is_open()) {
         file << std::string("AmountInBank: ") << gameState.AmountInBank << "\n";
-        //TODO some sort od iterator for each field of the gamestate struct.
+        //TODO some sort of iterator for each field of the gamestate struct.
+
+        // Iterate over the vector of items and save their information
+        for (const auto& tuple : gameState.AutoClickers) {
+            file << std::string(std::get<const char*>(tuple)) << ": " << std::get<int>(tuple) << "\n";
+        }
 
         file.close();
         std::cout << "Game state saved successfully to: " << filePath << "\n";
@@ -35,7 +40,14 @@ GameState SaveGameUtils::LoadGame() {
             if (line.find("AmountInBank: ") != std::string::npos) {
                 gameState.AmountInBank = std::stoi(line.substr(line.find(": ") + 2));
             }
-            //Will need to add more fields here as well
+            else if(line.find(": ") != std::string::npos)
+            {
+                std::string itemName = line.substr(0, line.find(": "));
+                int ownedAmount = std::stoi(line.substr(line.find(": ") + 2));
+
+                //Populate the vector of tuples with info from save file
+                gameState.AutoClickers.push_back(std::make_tuple(itemName.c_str(), ownedAmount));
+            }
         }
 
         file.close();
