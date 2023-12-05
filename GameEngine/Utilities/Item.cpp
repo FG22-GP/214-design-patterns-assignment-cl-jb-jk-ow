@@ -1,11 +1,9 @@
 #include "Item.h"
 #include <cmath>
 
-Item::Item(const char* itemName, SDL_Texture* itemTexture, int baseValuePerSecond, int baseCost,
-    int costMultiplierPerOwnedItem)
+Item::Item(const char* itemName, int baseValuePerSecond, int baseCost, int costMultiplierPerOwnedItem)
 {
     ItemName = itemName;
-    ItemTexture = itemTexture;
     BaseValuePerSecond = baseValuePerSecond;
     BaseCost = baseCost;
     CostMultiplierPerOwnedItem = costMultiplierPerOwnedItem;
@@ -14,6 +12,11 @@ Item::Item(const char* itemName, SDL_Texture* itemTexture, int baseValuePerSecon
 int Item::GetItemCps()
 {
     return BaseValuePerSecond * OwnedAmount * Multiplier;
+}
+
+int Item::GetItemCost()
+{
+    return BaseCost * (CostMultiplierPerOwnedItem * OwnedAmount);
 }
 
 void Item::BuyItem(int Amount)

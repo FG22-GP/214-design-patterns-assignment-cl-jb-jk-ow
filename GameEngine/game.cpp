@@ -13,6 +13,7 @@
 #include "Input/InputManager.h"
 #include "Utilities/Pool.h"
 #include "Utilities/Intersection.h"
+#include "Utilities/Item.h"
 
 #include "Window/Window.h"
 
@@ -46,6 +47,9 @@ int main(int argc, char* args[])
 
     // Gameplay Variables
     int cubeCount = 0;
+
+    //TODO: make a item creator nice thingy THIS IS TEMP
+    Item* SquareFarmer = new Item("Square Farmer", 1, 10, 2);
     
     // Create Window and Renderer
     Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE);

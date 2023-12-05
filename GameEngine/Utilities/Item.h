@@ -1,13 +1,11 @@
 #pragma once
-#include <SDL_render.h>
 
 class Item
 {
 public:
-    Item(const char* itemName, SDL_Texture* itemTexture, int baseValuePerSecond, int baseCost, int costMultiplierPerOwnedItem);
+    Item(const char* itemName, int baseValuePerSecond, int baseCost, int costMultiplierPerOwnedItem);
     
     const char* ItemName;
-    SDL_Texture* ItemTexture;
 
     int BaseCost;
     int CostMultiplierPerOwnedItem;
@@ -17,6 +15,7 @@ public:
     int OwnedAmount = 0;
 
     int GetItemCps();
+    int GetItemCost();
 
     void BuyItem(int Amount);
     void SetItemMultiplier();
