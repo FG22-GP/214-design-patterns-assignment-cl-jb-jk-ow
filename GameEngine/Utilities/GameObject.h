@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 struct Position {
 public:
@@ -13,5 +14,7 @@ public:
 
 class GameObject {
 public:
-    Transform Transform;
+    GameObject(Transform transform);
+    static std::vector<GameObject*> GameObjects;
+    Transform CurrentTransform;
 };
