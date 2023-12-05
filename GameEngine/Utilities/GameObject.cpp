@@ -42,10 +42,13 @@ void GameObject::Enable() {
 	ActiveGameObjects.push_back(this);
 }
 
-void GameObject::Disable(){
+void GameObject::Disable() {
 	std::erase_if(ActiveGameObjects, [this](GameObject* gameObject) {
 		return gameObject == this;
 		});
+}
+
+void GameObject::Update() {
 }
 
 void GameObject::SetPosition(Vector2 position) {

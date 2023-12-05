@@ -26,6 +26,7 @@ public:
     Item* Item;
     void Enable();
     void Disable();
+    virtual void Update();
 
     void SetPosition(Vector2 position);
     
