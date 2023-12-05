@@ -15,6 +15,7 @@ public:
 class GameObject {
 public:
     GameObject(Transform transform);
+    ~GameObject();
 
     void Enable();
     void Disable();

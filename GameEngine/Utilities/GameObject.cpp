@@ -2,11 +2,16 @@
 
 std::vector<GameObject*> GameObject::ActiveGameObjects;
 
-GameObject::GameObject(Transform transform){
+GameObject::GameObject(Transform transform) {
 	CurrentTransform = transform;
+	Enable();
 }
 
-void GameObject::Enable(){
+GameObject::~GameObject() {
+	Disable();
+}
+
+void GameObject::Enable() {
 	ActiveGameObjects.push_back(this);
 }
 
@@ -17,7 +22,7 @@ void GameObject::Disable(){
 }
 
 /*
-void GameObject::Update(){
+void GameObject::Update() {
 	for (GameObject* gameObject : GameObjects)
 	{
 		gameObject.
