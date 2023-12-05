@@ -33,7 +33,9 @@
     <ClCompile Include="Image\Image.cpp" />
     <ClCompile Include="Utilities\GameObject.cpp" />
     <ClCompile Include="Utilities\Intersection.cpp" />
+    <ClCompile Include="Utilities\Item.cpp" />
     <ClCompile Include="Utilities\Pool.cpp" />
+    <ClCompile Include="Utilities\Shop.cpp" />
     <ClCompile Include="Window\Window.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -127,7 +129,9 @@
     <ClInclude Include="Utilities\GameObject.h" />
     <ClInclude Include="Utilities\ImageURLs.h" />
     <ClInclude Include="Utilities\Intersection.h" />
+    <ClInclude Include="Utilities\Item.h" />
     <ClInclude Include="Utilities\Pool.h" />
+    <ClInclude Include="Utilities\Shop.h" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>
   <ItemGroup>
