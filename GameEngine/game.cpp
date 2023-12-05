@@ -179,7 +179,6 @@ int main(int argc, char* args[])
         gameWindow->Clear();
 
         // Rendering
-
         for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
         {
             gameWindow->Render(activeGameObject);
