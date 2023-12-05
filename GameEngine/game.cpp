@@ -45,10 +45,10 @@ void InitializeSDL()
 Item* CreateNewItem(const char* ItemName, int BaseValuePerSecond, int BaseCost, int CostMultiplierPerOwnedItem, Vector2 ItemRenderPosition, const char* ItemImageURL, Shop* ItemShop, SDL_Renderer* Renderer)
 {
     Image* newImage = new Image(Transform(ItemRenderPosition, Vector2(100, 100)), ItemImageURL, Renderer);
-    Text* newCostText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 45), FONT_FUTURAMEDIUM_URL, 12, BLACK, "COSTS:", Renderer);
-    Text* newOwnedText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 25), FONT_FUTURAMEDIUM_URL, 12, BLACK, "OWNED:", Renderer);
+    Text* newCostText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 45), FONT_FUTURAMEDIUM_URL, 15, BLACK, "COSTS:", Renderer);
+    Text* newOwnedText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 25), FONT_FUTURAMEDIUM_URL, 15, BLACK, "OWNED:", Renderer);
     Item* newItem = new Item(ItemName, BaseValuePerSecond, BaseCost, CostMultiplierPerOwnedItem, newCostText, newOwnedText);
-    Text* newNameText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y), FONT_FUTURAMEDIUM_URL, 15, BLACK, newItem->ItemName, Renderer);
+    Text* newNameText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y), FONT_FUTURAMEDIUM_URL, 17, BLACK, newItem->ItemName, Renderer);
     newImage->SetItemReference(newItem);
     ItemShop->AddNewShopItem(newItem);
 
