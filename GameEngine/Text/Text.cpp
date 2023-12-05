@@ -1,4 +1,7 @@
 #include "Text.h"
+
+#include <string>
+
 #include "../Utilities/Consts.h"
 
 Text::Text(Vector2 position, const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer) : GameObject(Transform(position)) {
@@ -28,7 +31,6 @@ void Text::RefreshText()
 {
     // render the text into an unoptimized CPU surface
     textSurface = TTF_RenderText_Solid(font, text, color);
-    int textWidth, textHeight;
     
     // Create texture GPU-stored texture from surface pixels
     Texture = SDL_CreateTextureFromSurface(renderer, textSurface);

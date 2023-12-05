@@ -1,11 +1,8 @@
 #include "Image.h"
-#include "../Utilities/Consts.h"
 #include <SDL_image.h>
-#include "../Utilities/ImageURLs.h"
 
 Image::Image(Transform transform, const char* newImageURL, SDL_Renderer* renderer) : GameObject(transform) {
     Renderer = renderer;
-
     SetTexture(newImageURL);
 }
 

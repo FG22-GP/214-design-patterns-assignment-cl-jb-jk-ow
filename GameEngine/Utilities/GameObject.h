@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <SDL_render.h>
+#include "Item.h"
 
 struct Vector2 {
 public:
@@ -22,13 +23,16 @@ public:
     GameObject(Transform transform);
     ~GameObject();
 
+    Item* Item;
     void Enable();
     void Disable();
 
     void SetPosition(Vector2 position);
-
+    
     static std::vector<GameObject*> ActiveGameObjects;
     SDL_Texture* Texture;
     SDL_Rect* Rect;
     Transform CurrentTransform;
+
+    void SetItemReference(::Item* item);
 };

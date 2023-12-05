@@ -15,7 +15,6 @@ public:
     int fontSize;
     const char* text;
     TTF_Font* font;
-    SDL_Texture* Texture;
     SDL_Surface* textSurface;
     SDL_Renderer* renderer;
     SDL_Color color;

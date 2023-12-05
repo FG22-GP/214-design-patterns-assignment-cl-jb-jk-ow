@@ -6,7 +6,7 @@ public:
     Item(const char* itemName, int baseValuePerSecond, int baseCost, int costMultiplierPerOwnedItem);
     
     const char* ItemName;
-
+    
     int BaseCost;
     int CostMultiplierPerOwnedItem;
     int BaseValuePerSecond;

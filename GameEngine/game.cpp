@@ -49,19 +49,24 @@ int main(int argc, char* args[])
     int cubeCount = 0;
 
     //TODO: make a item creator nice thingy THIS IS TEMP
-    Item* SquareFarmer = new Item("Square Farmer", 1, 10, 2);
     
     // Create Window and Renderer
     Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE);
 
     // Create Game Objects
+    //Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
+
+    Item* TestItem = new Item("Filbert", 1, 1, 1);
+    
     Image* cubeImage = new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer);
+    cubeImage->SetItemReference(TestItem);
+    
+    
     Image* currencyCubeImage = new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer);
     Image* cpsCubeImage = new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer);
     Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer);
     Text* currencyText = new Text(Vector2(100, 25), FONT_FUTURAMEDIUM_URL, 40, WHITE, std::to_string(cubeCount).c_str(), gameWindow->renderer);
     Text* cpsText = new Text(Vector2(350, 595), FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer);
-    Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
 
     // Create InputManager
     InputManager inputManager;
@@ -118,10 +123,10 @@ int main(int argc, char* args[])
         if (inputManager.IsMouseButtonPressed(SDL_BUTTON_LEFT)) {
             // Handle left mouse button click at inputManager.GetMouseX(), inputManager.GetMouseY()
             printf("Left mouse button is pressed at (%d, %d)\n", inputManager.GetClickPos()[0], inputManager.GetClickPos()[1]);
-
-            if(Intersection::IntersectionMouseRect(cubeImage->Rect, inputManager.GetClickPos()))
-            {
-                cubeCount++;
+        
+            GameObject* ClickedItem = Intersection::GetClickedGameObject(GameObject::ActiveGameObjects, inputManager.GetClickPos());
+            if(ClickedItem && ClickedItem->Item != nullptr) {
+                ClickedItem->Item->BuyItem(1);
             }
         }
 

@@ -22,6 +22,7 @@ Transform::Transform(Vector2 position, Vector2 scale) {
 
 GameObject::GameObject(Transform transform) {
 	// Create image rect
+	
 	Rect = new SDL_Rect{
 		transform.Position.X,
 		transform.Position.Y,
@@ -51,4 +52,8 @@ void GameObject::SetPosition(Vector2 position) {
 	CurrentTransform.Position = position;
 	Rect->x = position.X;
 	Rect->y = position.Y;
+}
+
+void GameObject::SetItemReference(::Item* item) {
+	Item = item;
 }
