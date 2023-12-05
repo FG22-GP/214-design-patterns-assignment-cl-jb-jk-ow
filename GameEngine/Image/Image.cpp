@@ -3,8 +3,7 @@
 #include <SDL_image.h>
 #include "../Utilities/ImageURLs.h"
 
-Image::Image(int width, int height, const char* newImageURL, SDL_Renderer* renderer)
-{
+Image::Image(int width, int height, const char* newImageURL, SDL_Renderer* renderer) : GameObject(this->CurrentTransform) {
     Renderer = renderer;
     imageWidth = width;
     imageHeight = height;
@@ -13,10 +12,11 @@ Image::Image(int width, int height, const char* newImageURL, SDL_Renderer* rende
 
     //Create image rect
     imageRect = new SDL_Rect{
-    WINDOW_CENTER_X - (width / 2),
-    WINDOW_CENTER_Y - (height / 2),
-    imageWidth,
-    imageHeight};
+        WINDOW_CENTER_X - (width / 2),
+        WINDOW_CENTER_Y - (height / 2),
+        imageWidth,
+        imageHeight
+    };
 }
 
 void Image::SetPosition(int x, int y)

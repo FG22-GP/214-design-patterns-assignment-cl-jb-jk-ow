@@ -1,8 +1,8 @@
 #include "Text.h"
 #include "../Utilities/Consts.h"
 
-Text::Text(const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer)
-{
+Text::Text(const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer):
+    GameObject(this->CurrentTransform) {
     // load font
     renderer = newRenderer;
     color = textColor;
