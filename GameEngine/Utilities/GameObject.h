@@ -15,6 +15,11 @@ public:
 class GameObject {
 public:
     GameObject(Transform transform);
-    static std::vector<GameObject*> GameObjects;
+
+    void Enable();
+    void Disable();
+    //static void Update();
+
+    std::vector<GameObject*> ActiveGameObjects; // TODO: Should be static
     Transform CurrentTransform;
 };
