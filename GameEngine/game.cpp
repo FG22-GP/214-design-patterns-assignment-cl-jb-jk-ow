@@ -178,7 +178,7 @@ int main(int argc, char* args[])
         // Clear the renderer
         gameWindow->Clear();
 
-        // Rendering
+        // Render all game objects
         for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
         {
             gameWindow->Render(activeGameObject);
