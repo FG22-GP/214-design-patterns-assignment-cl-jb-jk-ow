@@ -2,16 +2,16 @@
 
 struct Position {
 public:
-    int x;
-    int y;
+    int X;
+    int Y;
 };
 
 struct Transform {
 public:
-    Position position;
+    Position Position;
 };
 
 class GameObject {
 public:
-    Transform transform;
+    Transform Transform;
 };
