@@ -85,6 +85,10 @@ int main(int argc, char* args[])
     Item* item_SquareSpace = CreateNewItem("Square Space", 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->renderer);
     Item* item_SquareSquared = CreateNewItem("Square Squared", 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->renderer);
 
+    // Create pool
+    //Image* feedbackImage = new Image(Transform(Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT), Vector2(100, 100)), IMG_SQUAREPANTS_URL, gameWindow->renderer);
+    //Pool* clickFeedbackPool = new Pool(128, feedbackImage);
+
     // Create InputManager
     InputManager inputManager;
 
@@ -175,10 +179,16 @@ int main(int argc, char* args[])
         }
         cpsText->SetText(std::to_string(currentCps).append("/cps").c_str());
 
+        // Update all active game object
+        for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
+        {
+            activeGameObject->Update();
+        }
+
         // Clear the renderer
         gameWindow->Clear();
 
-        // Render all game objects
+        // Render all active game objects
         for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
         {
             gameWindow->Render(activeGameObject);
