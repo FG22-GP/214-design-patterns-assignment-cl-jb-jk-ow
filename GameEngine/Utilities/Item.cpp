@@ -4,14 +4,22 @@
 
 #include "../Text/Text.h"
 
-Item::Item(const char* itemName, int baseValuePerSecond, int baseCost, int costMultiplierPerOwnedItem, Text* itemText, Text* ownedText)
+Item::Item(Transform initialTransform, const char* itemName, int baseValuePerSecond, int baseCost, int costMultiplierPerOwnedItem, Image* previewImage, Text* nameText, Text* costText, Text* ownedText) : GameObject(initialTransform)
 {
-    CostText = itemText;
-    OwnedText = ownedText;
     ItemName = itemName;
     BaseValuePerSecond = baseValuePerSecond;
     BaseCost = baseCost;
     CostMultiplierPerOwnedItem = costMultiplierPerOwnedItem;
+
+    PreviewImage = previewImage;
+    NameText = nameText;
+    CostText = costText;
+    OwnedText = ownedText;
+
+    AddComponent(PreviewImage);
+    AddComponent(NameText);
+    AddComponent(CostText);
+    AddComponent(OwnedText);
 
     RefreshItemTexts();
 }

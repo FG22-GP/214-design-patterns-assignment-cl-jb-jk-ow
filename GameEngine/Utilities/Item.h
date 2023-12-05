@@ -1,13 +1,17 @@
 #pragma once
+#include "GameObject.h"
+#include "../Image/Image.h"
 
 class Text;
 
-class Item
+class Item : public GameObject
 {
 public:
-    Item(const char* itemName, int baseValuePerSecond, int baseCost, int costMultiplierPerOwnedItem, Text* costText, Text* ownedText);
+    Item(Transform initialTransform, const char* itemName, int baseValuePerSecond, int baseCost, int costMultiplierPerOwnedItem, Image* previewImage, Text* nameText, Text* costText, Text* ownedText);
     
     const char* ItemName;
+    Image* PreviewImage;
+    Text* NameText;
     Text* CostText;
     Text* OwnedText;
     

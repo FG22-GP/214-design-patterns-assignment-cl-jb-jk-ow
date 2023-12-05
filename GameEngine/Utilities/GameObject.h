@@ -1,39 +1,33 @@
 #pragma once
 #include <vector>
-#include <SDL_render.h>
-#include "Item.h"
+#include "../Transform.h"
+#include "../Renderer.h"
 
-struct Vector2 {
-public:
-    int X;
-    int Y;
-};
-
-struct Transform {
-public:
-    Transform();
-    Transform(Vector2 position);
-    Transform(Vector2 position, Vector2 scale);
-    Vector2 Position;
-    Vector2 Scale;
-};
+class Component;
 
 class GameObject {
 public:
-    GameObject(Transform transform);
+    GameObject(Transform initialTransform);
     ~GameObject();
 
-    Item* Item;
-    void Enable();
-    void Disable();
-    virtual void Update();
+    virtual void Enable();
+    virtual void Disable();
+    virtual void Update(float deltaTime);
 
+    void AddComponent(Component* component);
+    void RemoveComponent(Component* component);
     void SetPosition(Vector2 position);
+
+    std::vector<Component*> GetComponents();
+    std::vector<Renderer*> GetRenderers();
     
     static std::vector<GameObject*> ActiveGameObjects;
-    SDL_Texture* Texture;
-    SDL_Rect* Rect;
-    Transform CurrentTransform;
 
-    void SetItemReference(::Item* item);
+    Transform transform;
+
+protected:
+    std::vector<Component*> components;
+
+private:
+    std::vector<Renderer*> renderers;
 };

@@ -1,12 +1,10 @@
 #include "Text.h"
-
 #include <string>
-
 #include "../Utilities/Consts.h"
 
-Text::Text(Vector2 position, const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer) : GameObject(Transform(position)) {
+Text::Text(Transform initialLocalTransform, const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* renderer) : Renderer(initialLocalTransform) {
     // load font
-    renderer = newRenderer;
+    this->renderer = renderer;
     color = textColor;
     text = newText;
     fontSize = newFontSize;
@@ -27,13 +25,21 @@ void Text::SetText(const char* NewText)
     RefreshText();
 }
 
+/*
+void Text::OnGameObjectTransformed(Transform newTransform) {
+    Renderer::OnGameObjectTransformed(newTransform);
+
+    RefreshText();
+}
+*/
+
 void Text::RefreshText()
 {
     // render the text into an unoptimized CPU surface
     textSurface = TTF_RenderText_Solid(font, text, color);
     
     // Create texture GPU-stored texture from surface pixels
-    Texture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    texture = SDL_CreateTextureFromSurface(renderer, textSurface);
     
     // Get dimensions
     auto width = textSurface->w;
@@ -42,11 +48,5 @@ void Text::RefreshText()
     //Get rid of old loaded surface
     SDL_FreeSurface(textSurface);
 
-    //Create rect
-    Rect = new SDL_Rect{
-        CurrentTransform.Position.X,
-        CurrentTransform.Position.Y,
-        width,
-        height 
-    };
+    RefreshRect(Transform(Vector2(transform.position.x, transform.position.y), Vector2(width, height)));
 }

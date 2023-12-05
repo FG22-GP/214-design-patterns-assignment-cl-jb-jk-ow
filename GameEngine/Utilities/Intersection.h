@@ -2,6 +2,7 @@
 #include <SDL_rect.h>
 #include <vector>
 #include "GameObject.h"
+#include "Item.h"
 
 class Intersection {
 public:

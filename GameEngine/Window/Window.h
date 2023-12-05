@@ -3,6 +3,7 @@
 #include "../Text/Text.h"
 #include <SDL_render.h>
 #include <memory>
+#include "../Renderer.h"
 
 
 extern class IImageLoader;
@@ -23,11 +24,11 @@ public:
 	Window(int width, int height, SDL_Color windowColor);
 	~Window();
 
-	SDL_Renderer* renderer;
+	SDL_Renderer* sdlRenderer;
 	
 	bool WasSuccessful() { return createdWindowSuccessfully; }
 	
-	void Render(GameObject* gameObject);
+	void Render(Renderer* renderer);
 	void Clear();
 	void Present();
 	std::unique_ptr<Image> LoadImage(const char* path);

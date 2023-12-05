@@ -12,8 +12,11 @@ bool Intersection::IntersectionMouseRect(SDL_Rect* Rect, std::vector<int> MouseP
 
 GameObject* Intersection::GetClickedGameObject(std::vector<GameObject*>& gameobjects, std::vector<int> MousePos) {
     for (GameObject* gameobject : gameobjects) {
-        if(IntersectionMouseRect(gameobject->Rect, MousePos)) {
-            return gameobject;
+        std::vector<Renderer*> renderers = gameobject->GetRenderers();
+        for (Renderer* renderer : renderers) {
+            if (IntersectionMouseRect(renderer->rect, MousePos)) {
+                return gameobject;
+            }
         }
     }
     return nullptr;
@@ -22,10 +25,13 @@ GameObject* Intersection::GetClickedGameObject(std::vector<GameObject*>& gameobj
 Item* Intersection::GetClickedItem(std::vector<GameObject*>& gameobjects, std::vector<int> MousePos)
 {
     for (GameObject* gameobject : gameobjects) {
-        if(gameobject->Item != nullptr)
-        {
-            if(IntersectionMouseRect(gameobject->Rect, MousePos)) {
-                return gameobject->Item;
+        auto* item = dynamic_cast<Item*>(gameobject);
+        if (item) {
+            std::vector<Renderer*> renderers = item->GetRenderers();
+            for (Renderer* renderer : renderers) {
+                if (IntersectionMouseRect(renderer->rect, MousePos)) {
+                    return item;
+                }
             }
         }
     }

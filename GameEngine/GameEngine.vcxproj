@@ -27,10 +27,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Text\Text.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Image\Image.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utilities\GameObject.cpp" />
     <ClCompile Include="Utilities\Intersection.cpp" />
     <ClCompile Include="Utilities\Item.cpp" />
@@ -123,9 +126,12 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Input\InputManager.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Image\Image.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Utilities\Consts.h" />
     <ClInclude Include="Utilities\GameObject.h" />
     <ClInclude Include="Utilities\GameState.h" />

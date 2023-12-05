@@ -1,4 +1,5 @@
 #pragma once
+#include "SDL.h"
 
 const int WINDOW_WIDTH = 1024;
 const int WINDOW_HEIGHT = 768;

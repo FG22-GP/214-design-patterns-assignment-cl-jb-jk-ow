@@ -11,6 +11,7 @@
 #include "Utilities/ImageURLs.h"
 #include "Utilities/FontURLs.h"
 #include "Input/InputManager.h"
+#include "Utilities/GameObject.h"
 #include "Utilities/Pool.h"
 #include "Utilities/Intersection.h"
 #include "Utilities/Item.h"
@@ -44,15 +45,16 @@ void InitializeSDL()
 
 Item* CreateNewItem(const char* ItemName, int BaseValuePerSecond, int BaseCost, int CostMultiplierPerOwnedItem, Vector2 ItemRenderPosition, const char* ItemImageURL, Shop* ItemShop, SDL_Renderer* Renderer)
 {
-    Image* newImage = new Image(Transform(ItemRenderPosition, Vector2(100, 100)), ItemImageURL, Renderer);
-    Text* newCostText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 45), FONT_FUTURAMEDIUM_URL, 15, BLACK, "COSTS:", Renderer);
-    Text* newOwnedText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 25), FONT_FUTURAMEDIUM_URL, 15, BLACK, "OWNED:", Renderer);
-    Item* newItem = new Item(ItemName, BaseValuePerSecond, BaseCost, CostMultiplierPerOwnedItem, newCostText, newOwnedText);
-    Text* newNameText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y), FONT_FUTURAMEDIUM_URL, 17, BLACK, newItem->ItemName, Renderer);
-    newImage->SetItemReference(newItem);
-    ItemShop->AddNewShopItem(newItem);
+    Image* previewImage = new Image(Transform(), ItemImageURL, Renderer);
+    Text* nameText = new Text(Transform(Vector2(100, 0)), FONT_FUTURAMEDIUM_URL, 17, BLACK, ItemName, Renderer);
+    Text* costText = new Text(Transform(Vector2(100, 45)), FONT_FUTURAMEDIUM_URL, 15, BLACK, "COSTS:", Renderer);
+    Text* ownedText = new Text(Transform(Vector2(100, 25)), FONT_FUTURAMEDIUM_URL, 15, BLACK, "OWNED:", Renderer);
 
-    return newItem;
+    Item* item = new Item(Transform(ItemRenderPosition, Vector2(100, 100)), ItemName, BaseValuePerSecond, BaseCost, CostMultiplierPerOwnedItem, previewImage, nameText, costText, ownedText);
+
+    ItemShop->AddNewShopItem(item);
+
+    return item;
 }
 
 int main(int argc, char* args[])
@@ -68,22 +70,42 @@ int main(int argc, char* args[])
     Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE);
 
     // Create Game Objects
-    Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
-    Image* cubeImage = new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer);
-    Image* currencyCubeImage = new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer);
-    Image* cpsCubeImage = new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer);
-    Text* currencyText = new Text(Vector2(100, 25), FONT_FUTURAMEDIUM_URL, 40, WHITE, std::to_string(cubeCount).c_str(), gameWindow->renderer);
-    Text* cpsText = new Text(Vector2(350, 595), FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer);
+    GameObject* backgroundFog = new GameObject(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)));
+    Image* backgroundFogImage = new Image(Transform(), IMG_BACKGROUNDFOG_URL, gameWindow->sdlRenderer);
+    backgroundFog->AddComponent(backgroundFogImage);
+
+    GameObject* cube = new GameObject(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)));
+    Image* cubeImage = new Image(Transform(), IMG_CUBE_URL, gameWindow->sdlRenderer);
+    cube->AddComponent(cubeImage);
+
+    GameObject* currencyCube = new GameObject(Transform(Vector2(15, 15), Vector2(70, 70)));
+    Image* currencyCubeImage = new Image(Transform(), IMG_SMALLCUBE_URL, gameWindow->sdlRenderer);
+    currencyCube->AddComponent(currencyCubeImage);
+
+    GameObject* cpsCube = new GameObject(Transform(Vector2(300, 590), Vector2(45, 45)));
+    Image* cpsCubeImage = new Image(Transform(), IMG_SMALLCUBE_URL, gameWindow->sdlRenderer);
+    cpsCube->AddComponent(cpsCubeImage);
+
+    GameObject* currency = new GameObject(Transform(Vector2(100, 25), Vector2(1, 1)));
+    Text* currencyText = new Text(Transform(), FONT_FUTURAMEDIUM_URL, 40, WHITE, std::to_string(cubeCount).c_str(), gameWindow->sdlRenderer);
+    currency->AddComponent(currencyText);
+
+    GameObject* cps = new GameObject(Transform(Vector2(350, 595), Vector2(1, 1)));
+    Text* cpsText = new Text(Transform(), FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->sdlRenderer);
+    cps->AddComponent(cpsText);
 
     //Create Shop & Items
-    Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer);
+    GameObject* squareMartBackground = new GameObject(Transform(Vector2(780, -10), Vector2(250, 800)));
+    Image* squareMartBackgroundImage = new Image(Transform(), IMG_SQUAREMART_URL, gameWindow->sdlRenderer);
+    squareMartBackground->AddComponent(squareMartBackgroundImage);
+    
     Shop* squareMart = new Shop();
     
-    Item* item_SquarePants = CreateNewItem("Square Pants", 1, 10, 2, Vector2(800, 65), IMG_SQUAREPANTS_URL, squareMart, gameWindow->renderer);
-    Item* item_Squire = CreateNewItem("Squire", 5, 100, 2, Vector2(800, 175), IMG_SQUIRE_URL, squareMart, gameWindow->renderer);
-    Item* item_SquarePheonix = CreateNewItem("Square Pheonix", 25, 500, 3, Vector2(800, 285), IMG_SQUAREPHEONIX_URL, squareMart, gameWindow->renderer);
-    Item* item_SquareSpace = CreateNewItem("Square Space", 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->renderer);
-    Item* item_SquareSquared = CreateNewItem("Square Squared", 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->renderer);
+    Item* item_SquarePants = CreateNewItem("Square Pants", 1, 10, 2, Vector2(800, 65), IMG_SQUAREPANTS_URL, squareMart, gameWindow->sdlRenderer);
+    Item* item_Squire = CreateNewItem("Squire", 5, 100, 2, Vector2(800, 175), IMG_SQUIRE_URL, squareMart, gameWindow->sdlRenderer);
+    Item* item_SquarePheonix = CreateNewItem("Square Pheonix", 25, 500, 3, Vector2(800, 285), IMG_SQUAREPHEONIX_URL, squareMart, gameWindow->sdlRenderer);
+    Item* item_SquareSpace = CreateNewItem("Square Space", 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->sdlRenderer);
+    Item* item_SquareSquared = CreateNewItem("Square Squared", 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->sdlRenderer);
 
     // Create pool
     //Image* feedbackImage = new Image(Transform(Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT), Vector2(100, 100)), IMG_SQUAREPANTS_URL, gameWindow->renderer);
@@ -146,7 +168,7 @@ int main(int argc, char* args[])
             printf("Left mouse button is pressed at (%d, %d)\n", inputManager.GetClickPos()[0], inputManager.GetClickPos()[1]);
 
             //If cube is clicked
-            if(Intersection::IntersectionMouseRect(cubeImage->Rect, inputManager.GetClickPos()))
+            if(Intersection::IntersectionMouseRect(cubeImage->rect, inputManager.GetClickPos()))
             {
                 cubeCount++;
             }
@@ -182,16 +204,19 @@ int main(int argc, char* args[])
         // Update all active game object
         for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
         {
-            activeGameObject->Update();
+            activeGameObject->Update(REFRESH_RATE);
         }
 
         // Clear the renderer
         gameWindow->Clear();
 
-        // Render all active game objects
+        // Render all active game object renderer components
         for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
         {
-            gameWindow->Render(activeGameObject);
+            for (Renderer* renderer : activeGameObject->GetRenderers())
+            {
+                gameWindow->Render(renderer);
+            }
         }
         
         gameWindow->Present();

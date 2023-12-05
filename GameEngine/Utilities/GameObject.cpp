@@ -3,34 +3,8 @@
 
 std::vector<GameObject*> GameObject::ActiveGameObjects;
 
-Transform::Transform()
-{
-	Position = Vector2(0, 0);
-	Scale = Vector2(1, 1);
-}
-
-Transform::Transform(Vector2 position)
-{
-	Position = position;
-	Scale = Vector2(1, 1);
-}
-
-Transform::Transform(Vector2 position, Vector2 scale) {
-	Position = position;
-	Scale = scale;
-}
-
-GameObject::GameObject(Transform transform) {
-	// Create image rect
-	
-	Rect = new SDL_Rect{
-		transform.Position.X,
-		transform.Position.Y,
-		transform.Scale.X,
-		transform.Scale.Y
-	};
-	CurrentTransform = transform;
-
+GameObject::GameObject(Transform initialTransform) {
+	transform = initialTransform;
 	Enable();
 }
 
@@ -48,15 +22,42 @@ void GameObject::Disable() {
 		});
 }
 
-void GameObject::Update() {
+void GameObject::Update(float deltaTime) {
+	for (Component* component : components)
+	{
+		component->Update(deltaTime);
+	}
+}
+
+void GameObject::AddComponent(Component* component) {
+	components.push_back(component);
+	component->OnGameObjectTransformed(transform);
+	
+	auto* renderer = dynamic_cast<Renderer*>(component);
+	if (renderer) {
+		renderers.push_back(renderer);
+	}
+}
+
+void GameObject::RemoveComponent(Component* component) {
+	std::erase_if(components, [component](Component* iteratedComponent) {
+		return component == iteratedComponent;
+		});
 }
 
 void GameObject::SetPosition(Vector2 position) {
-	CurrentTransform.Position = position;
-	Rect->x = position.X;
-	Rect->y = position.Y;
+	transform.position = position;
+
+	for (Component* component : components)
+	{
+		component->OnGameObjectTransformed(transform);
+	}
 }
 
-void GameObject::SetItemReference(::Item* item) {
-	Item = item;
+std::vector<Component*> GameObject::GetComponents() {
+	return components;
+}
+
+std::vector<Renderer*> GameObject::GetRenderers() {
+	return renderers;
 }
