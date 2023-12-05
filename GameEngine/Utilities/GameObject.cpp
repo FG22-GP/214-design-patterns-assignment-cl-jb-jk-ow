@@ -1,5 +1,7 @@
 #include "GameObject.h"
 
+std::vector<GameObject*> GameObject::ActiveGameObjects;
+
 GameObject::GameObject(Transform transform){
 	CurrentTransform = transform;
 }

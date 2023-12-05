@@ -20,6 +20,6 @@ public:
     void Disable();
     //static void Update();
 
-    std::vector<GameObject*> ActiveGameObjects; // TODO: Should be static
+    static std::vector<GameObject*> ActiveGameObjects;
     Transform CurrentTransform;
 };
