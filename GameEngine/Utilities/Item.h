@@ -24,6 +24,6 @@ public:
     void BuyItem(int Amount);
     void SetItemMultiplier();
 
-private:
     void RefreshItemTexts();
+private:
 };

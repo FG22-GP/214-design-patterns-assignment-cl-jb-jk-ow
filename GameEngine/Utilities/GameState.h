@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -9,28 +10,22 @@ struct GameState
     GameState() : AmountInBank(0), AutoClickers() {}
     
     int AmountInBank;
-    std::vector<std::tuple<const char*, int>> AutoClickers;
-    // Add new fields for each building
+    std::vector<std::tuple<std::string, int>> AutoClickers;
 
     void AddItem(Item* item);
 
-    Item* FindItemByName(const std::vector<Item*>& items, const char* name);
+    Item* FindItemByName(const std::vector<Item*>& items, std::string name);
 
     void UpdateItem(Item* item);
 };
 
-inline void GameState::AddItem(Item* item)
-{
-    AutoClickers.push_back(std::make_tuple(item->ItemName, item->OwnedAmount));
-}
-
 inline void GameState::UpdateItem(Item* item)
 {
     for (auto& autoClicker : AutoClickers) {
-        const char* itemName = std::get<const char*>(autoClicker);
+        std::string itemName = std::get<0>(autoClicker);
 
         // Check if the item names match
-        if (strcmp(itemName, item->ItemName) == 0) {
+        if (itemName == item->ItemName) {
             // Update the tuple's int value with item's OwnedAmount
             std::get<int>(autoClicker) = item->OwnedAmount;
             printf("Updated existing item: %s\n", itemName);
@@ -38,13 +33,13 @@ inline void GameState::UpdateItem(Item* item)
         }
     }
     // If the item is not present, add it to the AutoClickers vector
-    //AutoClickers.push_back(std::make_tuple(item->ItemName, item->OwnedAmount));
+    AutoClickers.push_back(std::make_tuple(item->ItemName, item->OwnedAmount));
     printf("Added new item: %s\n", item->ItemName);
 }
 
-inline Item* FindItemByName(const std::vector<Item*>& items, const char* name) {
+inline Item* FindItemByName(const std::vector<Item*>& items, std::string name) {
     for (Item* item : items) {
-        if (strcmp(item->ItemName, name) == 0) {
+        if (item->ItemName == name) {
             return item;
         }
     }

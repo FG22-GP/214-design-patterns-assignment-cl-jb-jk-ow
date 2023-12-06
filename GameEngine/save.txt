@@ -1,6 +1,4 @@
-AmountInBank: 60
-°ÚO»»: 0
-°ÚO»»: 0
-°ÚO»»: 0
-°ÚO»»: 0
-°ÚO»»: 0
+AmountInBank: 111
+Square_Pants: 3
+Squire: 1
+Square_Pheonix: 1

@@ -90,10 +90,9 @@ int main(int argc, char* args[])
     std::vector<Item*> items = {item_SquarePants, item_Squire, item_SquarePheonix, item_SquareSpace, item_SquareSquared};
     GameState gameState = SaveGameUtils::LoadGame(items);
     cubeCount = gameState.AmountInBank;
-    cubeCount = gameState.AmountInBank;
     
     for (auto autoClicker : gameState.AutoClickers) {
-        const char* itemName = std::get<0>(autoClicker);
+        string itemName = std::get<0>(autoClicker);
         printf("Item name: %s\n", itemName);
         int ownedAmount = std::get<1>(autoClicker);
 
@@ -102,6 +101,7 @@ int main(int argc, char* args[])
 
         if (item) {
             item->OwnedAmount = ownedAmount;
+            item->RefreshItemTexts();
         } else {
             printf("Item not found: {}", itemName);
         }
@@ -183,7 +183,7 @@ int main(int argc, char* args[])
                 }
             }
         }
-
+        
         currencyText->SetText(std::to_string(cubeCount).c_str());
 
         //Calculate CPS from items

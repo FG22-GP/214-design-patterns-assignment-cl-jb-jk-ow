@@ -10,7 +10,7 @@ namespace fs = std::filesystem;
 void SaveGameUtils::SaveGame(const GameState& gameState) {
     const std::string filename = "save.txt";
     fs::path filePath = fs::current_path() / filename;
-    std::ofstream file(filePath);
+    std::ofstream file(filePath, std::ios::out | std::ios::binary);
     
     if (file.is_open()) {
         file << std::string("AmountInBank: ") << gameState.AmountInBank << "\n";
@@ -31,7 +31,7 @@ GameState SaveGameUtils::LoadGame(std::vector<Item*>& items) {
     const std::string filename = "save.txt";
 
     fs::path filePath = fs::current_path() / filename;
-    stream.open(filePath, std::ifstream::in);
+    stream.open(filePath, std::ifstream::in | std::ios::binary);
     
     if (stream.is_open()) {
         GameState gameState;
@@ -44,7 +44,8 @@ GameState SaveGameUtils::LoadGame(std::vector<Item*>& items) {
             else if(line.find(": "))
             {
                 // Split the line into item name and owned amount
-                static const char* itemName = line.substr(0, line.find(": ")).c_str();
+                std::string itemNameStr = line.substr(0, line.find(": "));
+                const char* itemName = itemNameStr.c_str();
                 int ownedAmount = std::stoi(line.substr(line.find(": ") + 2));
 
                 // Populate the vector of tuples with info from save file
@@ -52,9 +53,6 @@ GameState SaveGameUtils::LoadGame(std::vector<Item*>& items) {
 
                 if (item) {
                     gameState.AutoClickers.push_back(std::make_tuple(itemName, ownedAmount));
-                } else {
-                    // If the item is not in the save file, add it with OwnedAmount: 0
-                    gameState.AutoClickers.push_back(std::make_tuple(itemName, 0));
                 }
             }
         }
