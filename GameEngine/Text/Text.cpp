@@ -42,7 +42,7 @@ void Text::RefreshText()
     //if a background color is set, setup bg
     if(backgroundColor->a > 0) {
         textBGSurface = SDL_CreateRGBSurface(0, Rect->w, Rect->h, 32, 0, 0, 0, 0);
-        Uint32 backgroundColorValue = SDL_MapRGB(textBGSurface->format, backgroundColor->r, backgroundColor->g, backgroundColor->b);
+        Uint32 backgroundColorValue = SDL_MapRGBA(textBGSurface->format, backgroundColor->r, backgroundColor->g, backgroundColor->b, backgroundColor->a);
         SDL_FillRect(textBGSurface, nullptr, backgroundColorValue);
     }
     // render the text into an unoptimized CPU surface
