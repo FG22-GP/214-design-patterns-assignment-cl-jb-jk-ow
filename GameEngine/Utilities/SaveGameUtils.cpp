@@ -18,7 +18,6 @@ void SaveGameUtils::SaveGame(const GameState& gameState) {
         // Iterate over the vector of items and save their information
         for (const auto& tuple : gameState.AutoClickers) {
             file << std::get<0>(tuple) << ": " << std::get<1>(tuple) << "\n";
-            printf("Writing to save: %s\n", std::get<0>(tuple));
         }
 
         file.close();
@@ -49,7 +48,7 @@ GameState SaveGameUtils::LoadGame(std::vector<Item*>& items) {
                 int ownedAmount = std::stoi(line.substr(line.find(": ") + 2));
 
                 // Populate the vector of tuples with info from save file
-                Item* item = FindItemByName(items, itemName);
+                Item* item = gameState.FindItemByName(items, itemName);
 
                 if (item) {
                     gameState.AutoClickers.push_back(std::make_tuple(itemName, ownedAmount));

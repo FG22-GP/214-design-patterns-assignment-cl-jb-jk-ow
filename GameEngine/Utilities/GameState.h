@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Item.h"
+class Item;
 
 struct GameState
 {
@@ -12,9 +13,11 @@ struct GameState
     int AmountInBank;
     std::vector<std::tuple<std::string, int>> AutoClickers;
 
-    Item* FindItemByName(const std::vector<Item*>& items, std::string name);
+    Item* FindItemByName(const std::vector<Item*> items, std::string name);
 
     void UpdateItem(Item* item);
+
+    void SetItemValuesFromSave(std::vector<Item*> items);
 };
 
 inline void GameState::UpdateItem(Item* item)
@@ -26,7 +29,6 @@ inline void GameState::UpdateItem(Item* item)
         if (itemName == item->ItemName) {
             // Update the tuple's int value with item's OwnedAmount
             std::get<int>(autoClicker) = item->OwnedAmount;
-            printf("Updated existing item: %s\n", itemName);
             return;
         }
     }
@@ -35,7 +37,7 @@ inline void GameState::UpdateItem(Item* item)
     printf("Added new item: %s\n", item->ItemName);
 }
 
-inline Item* FindItemByName(const std::vector<Item*>& items, std::string name) {
+inline Item* GameState::FindItemByName(const std::vector<Item*> items, std::string name) {
     for (Item* item : items) {
         if (item->ItemName == name) {
             return item;
@@ -43,3 +45,20 @@ inline Item* FindItemByName(const std::vector<Item*>& items, std::string name) {
     }
     return nullptr; // Item not found
 }
+
+inline void GameState::SetItemValuesFromSave(std::vector<Item*> items)
+{
+    for (auto autoClicker : AutoClickers) {
+        const std::string itemName = std::get<0>(autoClicker);
+        const int ownedAmount = std::get<1>(autoClicker);
+
+        // Find the corresponding item
+        Item* item = FindItemByName(items, itemName);
+
+        if (item) {
+            item->OwnedAmount = ownedAmount;
+            item->RefreshItemTexts();
+        }
+    }
+}
+

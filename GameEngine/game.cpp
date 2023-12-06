@@ -84,31 +84,18 @@ int main(int argc, char* args[])
     Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer);
     Shop* squareMart = new Shop();
     
-    Item* item_SquarePants = CreateNewItem("Square_Pants", 1, 10, 2, Vector2(800, 65), IMG_SQUAREPANTS_URL, squareMart, gameWindow->renderer);
+    Item* item_SquarePants = CreateNewItem("Square Pants", 1, 10, 2, Vector2(800, 65), IMG_SQUAREPANTS_URL, squareMart, gameWindow->renderer);
     Item* item_Squire = CreateNewItem("Squire", 5, 100, 2, Vector2(800, 175), IMG_SQUIRE_URL, squareMart, gameWindow->renderer);
-    Item* item_SquarePheonix = CreateNewItem("Square_Pheonix", 25, 500, 3, Vector2(800, 285), IMG_SQUAREPHEONIX_URL, squareMart, gameWindow->renderer);
-    Item* item_SquareSpace = CreateNewItem("Square_Space", 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->renderer);
-    Item* item_SquareSquared = CreateNewItem("Square_Squared", 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->renderer);
+    Item* item_SquarePhoenix = CreateNewItem("Square Phoenix", 25, 500, 3, Vector2(800, 285), IMG_SQUAREPHEONIX_URL, squareMart, gameWindow->renderer);
+    Item* item_SquareSpace = CreateNewItem("Square Space", 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->renderer);
+    Item* item_SquareSquared = CreateNewItem("Square Squared", 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->renderer);
 
-    std::vector<Item*> items = {item_SquarePants, item_Squire, item_SquarePheonix, item_SquareSpace, item_SquareSquared};
+    std::vector<Item*> items = {item_SquarePants, item_Squire, item_SquarePhoenix, item_SquareSpace, item_SquareSquared};
+
     GameState gameState = SaveGameUtils::LoadGame(items);
+
     cubeCount = gameState.AmountInBank;
-    
-    for (auto autoClicker : gameState.AutoClickers) {
-        string itemName = std::get<0>(autoClicker);
-        printf("Item name: %s\n", itemName);
-        int ownedAmount = std::get<1>(autoClicker);
-
-        // Find the corresponding item
-        Item* item = FindItemByName(items, itemName);
-
-        if (item) {
-            item->OwnedAmount = ownedAmount;
-            item->RefreshItemTexts();
-        } else {
-            printf("Item not found: {}", itemName);
-        }
-    }
+    gameState.SetItemValuesFromSave(items);
 
     // Create pool
     //Image* feedbackImage = new Image(Transform(Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT), Vector2(100, 100)), IMG_SQUAREPANTS_URL, gameWindow->renderer);
