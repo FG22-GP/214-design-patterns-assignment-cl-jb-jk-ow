@@ -6,6 +6,7 @@
 
 Text::Text(Vector2 position, const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer) : GameObject(Transform(position)) {
     // load font
+    backgroundColor = new SDL_Color{0, 0, 0, 0};
     renderer = newRenderer;
     color = textColor;
     text = newText;
@@ -27,10 +28,32 @@ void Text::SetText(const char* NewText)
     RefreshText();
 }
 
+void Text::SetBackgroundColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+    SDL_Color* NewColor = new SDL_Color{r, g, b, a};
+    backgroundColor = NewColor;
+    RefreshText();
+}
+
 void Text::RefreshText()
 {
+
+    SDL_Surface* textBGSurface = nullptr;
+    
+    //if a background color is set, setup bg
+    if(backgroundColor->a > 0) {
+        textBGSurface = SDL_CreateRGBSurface(0, Rect->w, Rect->h, 32, 0, 0, 0, 0);
+        Uint32 backgroundColorValue = SDL_MapRGB(textBGSurface->format, backgroundColor->r, backgroundColor->g, backgroundColor->b);
+        SDL_FillRect(textBGSurface, nullptr, backgroundColorValue);
+    }
     // render the text into an unoptimized CPU surface
     textSurface = TTF_RenderText_Solid(font, text, color);
+
+    //if a background color is set, continue setting up bg
+    if(textBGSurface != nullptr) {
+        SDL_BlitSurface(textSurface, nullptr, textBGSurface, nullptr);
+        SDL_FreeSurface(textSurface);
+        textSurface = textBGSurface;
+    }
     
     // Create texture GPU-stored texture from surface pixels
     Texture = SDL_CreateTextureFromSurface(renderer, textSurface);
@@ -40,7 +63,12 @@ void Text::RefreshText()
     auto height = textSurface->h;
     
     //Get rid of old loaded surface
-    SDL_FreeSurface(textSurface);
+    if (textBGSurface != nullptr) {
+        SDL_FreeSurface(textBGSurface);
+    }
+    else {
+        SDL_FreeSurface(textSurface);
+    }
 
     //Create rect
     Rect = new SDL_Rect{

@@ -76,7 +76,10 @@ int main(int argc, char* args[])
     Image* cpsCubeImage = new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer);
     Text* currencyText = new Text(Vector2(100, 25), FONT_FUTURAMEDIUM_URL, 40, WHITE, std::to_string(cubeCount).c_str(), gameWindow->renderer);
     Text* cpsText = new Text(Vector2(350, 595), FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer);
+    Text* saveText = new Text(Vector2(25, WINDOW_HEIGHT - 80), FONT_FUTURAMEDIUM_URL, 30, WHITE, "Save Game", gameWindow->renderer);
+    saveText->SetBackgroundColor(50, 50, 50, 1);
 
+    
     //Create Shop & Items
     Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer);
     Shop* squareMart = new Shop();
@@ -169,6 +172,10 @@ int main(int argc, char* args[])
             if(Intersection::IntersectionMouseRect(cubeImage->Rect, inputManager.GetClickPos()))
             {
                 cubeCount++;
+            }
+
+            if(Intersection::IntersectionMouseRect(saveText->Rect, inputManager.GetClickPos())) {
+                SaveGameUtils::SaveGame(gameState);
             }
 
             //If any GameObject is clicked

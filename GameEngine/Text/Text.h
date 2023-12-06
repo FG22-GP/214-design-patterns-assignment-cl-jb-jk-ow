@@ -11,7 +11,9 @@ public:
 
     void SetColor(SDL_Color Color);
     void SetText(const char* NewText);
+    void SetBackgroundColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
+    SDL_Color* backgroundColor;
     int fontSize;
     const char* text;
     TTF_Font* font;
