@@ -7,5 +7,5 @@ class SaveGameUtils
 public:
     static void SaveGame(const GameState& gameState);
     
-    static GameState LoadGame();
+    static GameState LoadGame(std::vector<Item*>& items);
 };

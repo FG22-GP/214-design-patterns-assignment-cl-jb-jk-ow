@@ -1,1 +1,6 @@
-AmountInBank: 121
+AmountInBank: 60
+°ÚO»»: 0
+°ÚO»»: 0
+°ÚO»»: 0
+°ÚO»»: 0
+°ÚO»»: 0
