@@ -159,10 +159,12 @@ int main(int argc, char* args[])
             if(Intersection::IntersectionMouseRect(cubeImage->Rect, inputManager.GetClickPos()))
             {
                 cubeCount++;
+                inputManager.OnMouseButtonRelease(SDL_BUTTON_LEFT);
             }
 
             if(Intersection::IntersectionMouseRect(saveText->Rect, inputManager.GetClickPos())) {
                 SaveGameUtils::SaveGame(gameState);
+                inputManager.OnMouseButtonRelease(SDL_BUTTON_LEFT);
             }
 
             //If any GameObject is clicked
@@ -173,7 +175,7 @@ int main(int argc, char* args[])
                     cubeCount -= ClickedItem->GetItemCost();
                     ClickedItem->BuyItem(1);
                     gameState.UpdateItem(ClickedItem);
-                    printf("Updated item: %s\n", ClickedItem->ItemName);
+                    inputManager.OnMouseButtonRelease(SDL_BUTTON_LEFT);
                 }
             }
         }

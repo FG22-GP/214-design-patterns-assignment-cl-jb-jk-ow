@@ -34,7 +34,6 @@ inline void GameState::UpdateItem(Item* item)
     }
     // If the item is not present, add it to the AutoClickers vector
     AutoClickers.push_back(std::make_tuple(item->ItemName, item->OwnedAmount));
-    printf("Added new item: %s\n", item->ItemName);
 }
 
 inline Item* GameState::FindItemByName(const std::vector<Item*> items, std::string name) {
