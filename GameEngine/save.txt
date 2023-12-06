@@ -1,4 +1,4 @@
-AmountInBank: 111
+AmountInBank: 291
 Square_Pants: 3
-Squire: 1
+Squire: 2
 Square_Pheonix: 1

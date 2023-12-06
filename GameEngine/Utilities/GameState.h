@@ -12,8 +12,6 @@ struct GameState
     int AmountInBank;
     std::vector<std::tuple<std::string, int>> AutoClickers;
 
-    void AddItem(Item* item);
-
     Item* FindItemByName(const std::vector<Item*>& items, std::string name);
 
     void UpdateItem(Item* item);
