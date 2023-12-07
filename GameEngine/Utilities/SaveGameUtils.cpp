@@ -13,7 +13,7 @@ void SaveGameUtils::SaveGame(const GameState& gameState) {
     std::ofstream file(filePath, std::ios::out | std::ios::binary);
     
     if (file.is_open()) {
-        file << std::string("AmountInBank: ") << gameState.AmountInBank << "\n";
+        file << std::string("CubeCount: ") << gameState.CubeCount << "\n";
 
         // Iterate over the vector of items and save their information
         for (const auto& tuple : gameState.AutoClickers) {
@@ -37,8 +37,8 @@ GameState SaveGameUtils::LoadGame(std::vector<Item*>& items) {
         std::string line;
         while (std::getline(stream, line)) {
             // Parse the line and update the GameState object
-            if (line.find("AmountInBank: ") != std::string::npos) {
-                gameState.AmountInBank = std::stoi(line.substr(line.find(": ") + 2));
+            if (line.find("CubeCount: ") != std::string::npos) {
+                gameState.CubeCount = std::stoi(line.substr(line.find(": ") + 2));
             }
             else if(line.find(": "))
             {

@@ -8,9 +8,9 @@ class Item;
 
 struct GameState
 {
-    GameState() : AmountInBank(0), AutoClickers() {}
+    GameState() : CubeCount(0), AutoClickers() {}
     
-    int AmountInBank;
+    int CubeCount;
     std::vector<std::tuple<std::string, int>> AutoClickers;
 
     Item* FindItemByName(const std::vector<Item*> items, std::string name);

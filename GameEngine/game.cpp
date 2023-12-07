@@ -63,8 +63,9 @@ int main(int argc, char* args[])
 
     //TODO: player stat manager thing instead?
     // Gameplay Variables
-    int cubeCount = 0;
     float cpsTimer = 0;
+    //Calculate CPS from items
+    int currentCps = 0;
     
     // Create Window and Renderer
     Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE);
@@ -74,7 +75,7 @@ int main(int argc, char* args[])
     Image* cubeImage = new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer);
     Image* currencyCubeImage = new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer);
     Image* cpsCubeImage = new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer);
-    Text* currencyText = new Text(Vector2(100, 25), FONT_FUTURAMEDIUM_URL, 40, WHITE, std::to_string(cubeCount).c_str(), gameWindow->renderer);
+    Text* currencyText = new Text(Vector2(100, 25), FONT_FUTURAMEDIUM_URL, 40, WHITE, " ", gameWindow->renderer); //text is a space
     Text* cpsText = new Text(Vector2(350, 595), FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer);
     Text* saveText = new Text(Vector2(25, WINDOW_HEIGHT - 80), FONT_FUTURAMEDIUM_URL, 30, WHITE, "Save Game", gameWindow->renderer);
     saveText->SetBackgroundColor(50, 50, 50, 1);
@@ -94,7 +95,6 @@ int main(int argc, char* args[])
 
     GameState gameState = SaveGameUtils::LoadGame(items);
 
-    cubeCount = gameState.AmountInBank;
     gameState.SetItemValuesFromSave(items);
 
     // Create pool
@@ -149,7 +149,6 @@ int main(int argc, char* args[])
 
         // Check for key presses
         if (inputManager.IsKeyPressed(SDL_SCANCODE_S)) {
-            gameState.AmountInBank = cubeCount;
             SaveGameUtils::SaveGame(gameState);
         }
 
@@ -158,7 +157,7 @@ int main(int argc, char* args[])
             //If cube is clicked
             if(Intersection::IntersectionMouseRect(cubeImage->Rect, inputManager.GetClickPos()))
             {
-                cubeCount++;
+                gameState.CubeCount++;
                 inputManager.OnMouseButtonRelease(SDL_BUTTON_LEFT);
             }
 
@@ -170,9 +169,9 @@ int main(int argc, char* args[])
             //If any GameObject is clicked
             Item* ClickedItem = Intersection::GetClickedItem(GameObject::ActiveGameObjects, inputManager.GetClickPos());
             if(ClickedItem && ClickedItem != nullptr) {
-                if(cubeCount >= ClickedItem->GetItemCost())
+                if(gameState.CubeCount >= ClickedItem->GetItemCost())
                 {
-                    cubeCount -= ClickedItem->GetItemCost();
+                    gameState.CubeCount -= ClickedItem->GetItemCost();
                     ClickedItem->BuyItem(1);
                     gameState.UpdateItem(ClickedItem);
                     inputManager.OnMouseButtonRelease(SDL_BUTTON_LEFT);
@@ -180,11 +179,9 @@ int main(int argc, char* args[])
             }
         }
         
-        currencyText->SetText(std::to_string(cubeCount).c_str());
+        currencyText->SetText(std::to_string(gameState.CubeCount).c_str());
 
-        //Calculate CPS from items
-        int currentCps = 0;
-
+        currentCps = 0;
         for (auto& it: squareMart->ShopItemMap) {
             currentCps += it.second->GetItemCps();
         }
@@ -193,7 +190,7 @@ int main(int argc, char* args[])
         if(cpsTimer >= 1000)
         {
             cpsTimer = 0;
-            cubeCount += currentCps;
+            gameState.CubeCount += currentCps;
         }
         cpsText->SetText(std::to_string(currentCps).append("/cps").c_str());
 
