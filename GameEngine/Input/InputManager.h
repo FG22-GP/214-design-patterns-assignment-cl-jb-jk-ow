@@ -58,7 +58,7 @@ public:
 
     void HandleSaveClick(GameState* gameState);
 
-    void AddClickable(GameObject* clickable);
+    void AddClickable(GameObject* clickable, std::string name);
     
 private:
     const Uint8* keyStates;  // Array of current key states
@@ -66,7 +66,7 @@ private:
     int clickX, clickY;      // Coords of last click
     unordered_map<SDL_Scancode, bool> pressedKeys;  // Hashset to store pressed keys
     unordered_map<Uint8, bool> pressedMouseButtons; // Hashset to store pressed mouse buttons
-    vector<GameObject*> clickables;
+    unordered_map<GameObject*, std::string> clickables;
     GameState* gameState;
 };
 

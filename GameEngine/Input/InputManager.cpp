@@ -79,16 +79,16 @@ void InputManager::OnMouseButtonRelease(Uint8 button)
     {
         HandleItemClick(gameState);
 
-        for (GameObject* clickable : clickables)
+        for (const auto& clickablePair : clickables)
         {
-            if (Intersection::IntersectionMouseRect(clickable->Rect, { mouseX, mouseY })) {
+            if (Intersection::IntersectionMouseRect(clickablePair.first->Rect, { mouseX, mouseY })) {
                 // Handle the click based on the type of GameObject
-                if (dynamic_cast<Image*>(clickable) != nullptr)
+                if (clickablePair.second == "cube_button")
                 {
                     HandleCubeClick(gameState);
                     break;
                 }
-                if (dynamic_cast<Text*>(clickable) != nullptr)
+                if (clickablePair.second == "save_button")
                 {
                     HandleSaveClick(gameState);
                     break; 
@@ -132,7 +132,7 @@ void InputManager::HandleSaveClick(GameState* gameState)
     SaveGameUtils::SaveGame(*gameState);
 }
 
-void InputManager::AddClickable(GameObject* clickable)
+void InputManager::AddClickable(GameObject* clickable, std::string name)
 {
-    clickables.push_back(clickable);
+    clickables.emplace(clickable, name);
 }

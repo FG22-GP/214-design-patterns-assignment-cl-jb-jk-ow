@@ -112,8 +112,8 @@ int main(int argc, char* args[])
 
     // Create InputManager
     InputManager inputManager(&gameState);
-    inputManager.AddClickable(saveText);
-    inputManager.AddClickable(cubeImage);
+    inputManager.AddClickable(saveText, "save_button");
+    inputManager.AddClickable(cubeImage, "cube_button");
 
     SDL_Event e;
     bool quit = false;

@@ -51,7 +51,7 @@ GameState SaveGameUtils::LoadGame(std::vector<Item*>& items) {
                 Item* item = gameState.FindItemByName(items, itemName);
 
                 if (item) {
-                    gameState.AutoClickers.push_back(std::make_tuple(itemName, ownedAmount));
+                    gameState.AutoClickers.emplace_back(itemName, ownedAmount);
                 }
             }
         }
