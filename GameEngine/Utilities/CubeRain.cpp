@@ -11,7 +11,7 @@ void CubeRain::Update(Pool* poolToUpdate, int currentSpawnLimit) {
     if (poolToUpdate->currentActiveObjects < currentSpawnLimit) {
         GameObject* Obj = poolToUpdate->PoolGetObject();
         if (Obj != nullptr) {
-            int RandomXPos = MathUtils::GetRandomInt(WINDOW_WIDTH - WINDOW_WIDTH, WINDOW_WIDTH - 300);
+            int RandomXPos = MathUtils::GetRandomInt(630, WINDOW_WIDTH - 300);
             int RandomYPos = MathUtils::GetRandomInt(20, 800);
             Obj->Enable();
             Obj->SetPosition(Vector2(RandomXPos, RandomYPos * -1)); //todo: window height, 200 is for testing
