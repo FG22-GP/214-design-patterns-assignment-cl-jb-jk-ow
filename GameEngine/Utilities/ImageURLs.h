@@ -9,3 +9,4 @@ const char* const IMG_SQUIRE_URL{ "img/squire.png" };
 const char* const IMG_SQUAREPHEONIX_URL{ "img/squarePheonix.png" };
 const char* const IMG_SQUARESPACE_URL{ "img/squareSpace.png" };
 const char* const IMG_SQUARESQUARED_URL{ "img/squareSquared.png" };
+const char* const IMG_CURSOR_URL{ "img/cursor.png" };

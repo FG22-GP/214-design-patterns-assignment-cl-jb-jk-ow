@@ -11,6 +11,7 @@
 #include "Utilities/ImageURLs.h"
 #include "Utilities/FontURLs.h"
 #include "Input/InputManager.h"
+#include "Utilities/Cursor.h"
 #include "Utilities/GameState.h"
 #include "Utilities/Pool.h"
 #include "Utilities/Intersection.h"
@@ -60,7 +61,7 @@ Item* CreateNewItem(const char* ItemName, int BaseValuePerSecond, int BaseCost, 
 int main(int argc, char* args[])
 {
     InitializeSDL();
-
+    
     //TODO: player stat manager thing instead?
     // Gameplay Variables
     float cpsTimer = 0;
@@ -69,6 +70,10 @@ int main(int argc, char* args[])
     
     // Create Window and Renderer
     Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE);
+
+    // Create Cursor
+    SDL_Texture* cursorTexture = IMG_LoadTexture(gameWindow->renderer, IMG_CURSOR_URL);
+    Cursor* cursor = new Cursor(cursorTexture);
 
     // Create Game Objects
     Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
@@ -208,6 +213,9 @@ int main(int argc, char* args[])
         {
             gameWindow->Render(activeGameObject);
         }
+
+        cursor->UpdateCursor();
+        cursor->RenderCursor(gameWindow->renderer);
         
         gameWindow->Present();
 
