@@ -17,6 +17,7 @@ GameObject* Pool::PoolGetObject() {
     GameObject* FrontObj = ObjectPool.front();
     ObjectPool.pop();
     currentActiveObjects += 1;
+    FrontObj->poolObjSpeed = MathUtils::GetRandomInt(1, 3);
     return FrontObj;
 }
 

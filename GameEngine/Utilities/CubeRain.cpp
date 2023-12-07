@@ -31,7 +31,7 @@ void CubeRain::Update(Pool* poolToUpdate, int currentSpawnLimit) {
                  ActivePoolObjects.end());
         }
         else {
-            activePoolObj->SetPosition(Vector2(xPos, YPos + 3));
+            activePoolObj->SetPosition(Vector2(xPos, YPos + activePoolObj->poolObjSpeed));
         }
     }
 }

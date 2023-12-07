@@ -35,6 +35,7 @@ public:
     SDL_Texture* Texture;
     SDL_Rect* Rect;
     Transform CurrentTransform;
+    int poolObjSpeed;
 
     void SetItemReference(::Item* item);
 };
