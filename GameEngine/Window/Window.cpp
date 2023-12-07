@@ -5,7 +5,7 @@
 Window::Window(int width, int height, SDL_Color windowColor)
 {
     //Create Window and Renderer
-    SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE, &window, &renderer);
+    SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_SHOWN, &window, &renderer);
     if (!window)
     {
         printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
