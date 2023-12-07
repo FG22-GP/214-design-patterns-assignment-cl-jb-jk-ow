@@ -1,9 +1,10 @@
 #include "Image.h"
 #include <SDL_image.h>
 
-Image::Image(Transform transform, const char* newImageURL, SDL_Renderer* renderer) : GameObject(transform) {
+Image::Image(Transform transform, const char* newImageURL, SDL_Renderer* renderer, SDL_Color color) : GameObject(transform) {
     Renderer = renderer;
     SetTexture(newImageURL);
+    SetColor(color);
 }
 
 void Image::SetColor(SDL_Color Color) {

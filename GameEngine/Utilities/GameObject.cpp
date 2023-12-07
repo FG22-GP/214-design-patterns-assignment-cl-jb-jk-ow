@@ -1,4 +1,6 @@
 #include "GameObject.h"
+
+#include "MathUtils.h"
 #include "../Utilities/Consts.h"
 
 std::vector<GameObject*> GameObject::ActiveGameObjects;

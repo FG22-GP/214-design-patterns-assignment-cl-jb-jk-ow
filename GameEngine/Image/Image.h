@@ -8,7 +8,7 @@ class Image : public GameObject
 private:
     SDL_Renderer* Renderer;
 public:
-    Image(Transform transform, const char* newImageURL, SDL_Renderer* renderer);
+    Image(Transform transform, const char* newImageURL, SDL_Renderer* renderer, SDL_Color color);
     
     void SetColor(SDL_Color Color);
     void SetTexture(const char* ImgUrl);

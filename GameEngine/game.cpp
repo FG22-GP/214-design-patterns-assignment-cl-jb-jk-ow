@@ -18,6 +18,7 @@
 #include "Utilities/Item.h"
 #include "Utilities/SaveGameUtils.h"
 #include "Utilities/Shop.h"
+#include "Utilities/CubeRain.h"
 
 #include "Window/Window.h"
 
@@ -47,7 +48,7 @@ void InitializeSDL()
 
 Item* CreateNewItem(const char* ItemName, int BaseValuePerSecond, int BaseCost, int CostMultiplierPerOwnedItem, Vector2 ItemRenderPosition, const char* ItemImageURL, Shop* ItemShop, SDL_Renderer* Renderer)
 {
-    Image* newImage = new Image(Transform(ItemRenderPosition, Vector2(100, 100)), ItemImageURL, Renderer);
+    Image* newImage = new Image(Transform(ItemRenderPosition, Vector2(100, 100)), ItemImageURL, Renderer, WHITE);
     Text* newCostText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 45), FONT_FUTURAMEDIUM_URL, 15, BLACK, "COSTS:", Renderer);
     Text* newOwnedText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 25), FONT_FUTURAMEDIUM_URL, 15, BLACK, "OWNED:", Renderer);
     Item* newItem = new Item(ItemName, BaseValuePerSecond, BaseCost, CostMultiplierPerOwnedItem, newCostText, newOwnedText);
@@ -74,20 +75,25 @@ int main(int argc, char* args[])
     // Create Cursor
     SDL_Texture* cursorTexture = IMG_LoadTexture(gameWindow->renderer, IMG_CURSOR_URL);
     Cursor* cursor = new Cursor(cursorTexture);
+    
 
     // Create Game Objects
-    Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer);
-    Image* cubeImage = new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer);
-    Image* currencyCubeImage = new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer);
-    Image* cpsCubeImage = new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer);
+    Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer, WHITE);
+    
+    //Create Pool and CubeRain asset (cuberain asset is to make use of the pool)
+    Pool* rainObjPool = new Pool(2000, gameWindow->renderer);
+    CubeRain* cubeRain = new CubeRain();
+    
+    Image* cubeImage = new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer, WHITE);
+    Image* currencyCubeImage = new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer, WHITE);
+    Image* cpsCubeImage = new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer, WHITE);
     Text* currencyText = new Text(Vector2(100, 25), FONT_FUTURAMEDIUM_URL, 40, WHITE, " ", gameWindow->renderer); //text is a space
     Text* cpsText = new Text(Vector2(350, 595), FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer);
     Text* saveText = new Text(Vector2(25, WINDOW_HEIGHT - 80), FONT_FUTURAMEDIUM_URL, 30, WHITE, "Save Game", gameWindow->renderer);
     saveText->SetBackgroundColor(50, 50, 50, 1);
-
     
     //Create Shop & Items
-    Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer);
+    Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer, WHITE);
     Shop* squareMart = new Shop();
     
     Item* item_SquarePants = CreateNewItem("Square Pants", 1, 10, 2, Vector2(800, 65), IMG_SQUAREPANTS_URL, squareMart, gameWindow->renderer);
@@ -96,15 +102,13 @@ int main(int argc, char* args[])
     Item* item_SquareSpace = CreateNewItem("Square Space", 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->renderer);
     Item* item_SquareSquared = CreateNewItem("Square Squared", 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->renderer);
 
+
+
     std::vector<Item*> items = {item_SquarePants, item_Squire, item_SquarePhoenix, item_SquareSpace, item_SquareSquared};
 
     GameState gameState = SaveGameUtils::LoadGame(items);
 
     gameState.SetItemValuesFromSave(items);
-
-    // Create pool
-    //Image* feedbackImage = new Image(Transform(Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT), Vector2(100, 100)), IMG_SQUAREPANTS_URL, gameWindow->renderer);
-    //Pool* clickFeedbackPool = new Pool(128, feedbackImage);
 
     // Create InputManager
     InputManager inputManager(&gameState);
@@ -183,6 +187,11 @@ int main(int argc, char* args[])
         {
             gameWindow->Render(activeGameObject);
         }
+
+
+        //cube rain, and cuberain amt calc
+        int cubeRainLimit = static_cast<int>(std::round(static_cast<double>(currentCps) / 50.0));
+        cubeRain->Update(rainObjPool, cubeRainLimit);
 
         cursor->UpdateCursor();
         cursor->RenderCursor(gameWindow->renderer);

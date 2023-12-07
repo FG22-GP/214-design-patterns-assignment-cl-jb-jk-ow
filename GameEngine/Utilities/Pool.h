@@ -4,8 +4,9 @@
 
 class Pool {
 public:
-    Pool(int poolSize, GameObject* gameObject);
+    Pool(int poolSize, SDL_Renderer* Renderer);
+    int currentActiveObjects;
     GameObject* PoolGetObject();
-    void PoolReleaseObject(GameObject* gameObject);
+    void PoolReturnObject(GameObject* gameObject);
     std::queue<GameObject*> ObjectPool;
 };
