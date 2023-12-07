@@ -4,12 +4,16 @@
 #include <unordered_map>
 #include <vector>
 
+#include "../Utilities/GameState.h"
+
+class GameObject;
+
 using namespace std;
 
 class InputManager {
 public:
     // Constructor
-    InputManager();
+    InputManager(GameState* gs);
 
     // Destructor
     ~InputManager();
@@ -48,11 +52,21 @@ public:
     // Handle mouse button release
     void OnMouseButtonRelease(Uint8 button);
 
+    void HandleItemClick(GameState* gameState);
+
+    void HandleCubeClick(GameState* gameState);
+
+    void HandleSaveClick(GameState* gameState);
+
+    void AddClickable(GameObject* clickable);
+    
 private:
     const Uint8* keyStates;  // Array of current key states
     int mouseX, mouseY;      // Current mouse position
     int clickX, clickY;      // Coords of last click
     unordered_map<SDL_Scancode, bool> pressedKeys;  // Hashset to store pressed keys
     unordered_map<Uint8, bool> pressedMouseButtons; // Hashset to store pressed mouse buttons
+    vector<GameObject*> clickables;
+    GameState* gameState;
 };
 

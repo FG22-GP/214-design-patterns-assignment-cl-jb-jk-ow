@@ -1,10 +1,20 @@
 #include "InputManager.h"
 
+#include "../Image/Image.h"
+#include "../Text/Text.h"
+#include "../Utilities/GameObject.h"
+#include "../Utilities/Intersection.h"
+#include "../Utilities/GameState.h"'
+#include "../Utilities/Item.h"
+#include "../Utilities/SaveGameUtils.h"
+
 using namespace std;
 
-InputManager::InputManager() {
+InputManager::InputManager(GameState* gs) {
     // Initialize key states
     keyStates = SDL_GetKeyboardState(nullptr);
+
+    gameState = gs;
 
     // Initialize mouse position
     mouseX = 0;
@@ -23,6 +33,11 @@ void InputManager::Update() {
 
     // Update mouse state
     SDL_GetMouseState(&mouseX, &mouseY);
+
+    if(IsKeyPressed(SDL_SCANCODE_S))
+    {
+        SaveGameUtils::SaveGame(*gameState);
+    }
 }
 
 bool InputManager::IsKeyPressed(SDL_Scancode key) const {
@@ -60,7 +75,29 @@ void InputManager::OnMouseButtonPress(Uint8 button)
 
 void InputManager::OnMouseButtonRelease(Uint8 button)
 {
+    if(button == SDL_BUTTON_LEFT)
+    {
+        HandleItemClick(gameState);
+
+        for (GameObject* clickable : clickables)
+        {
+            if (Intersection::IntersectionMouseRect(clickable->Rect, { mouseX, mouseY })) {
+                // Handle the click based on the type of GameObject
+                if (dynamic_cast<Image*>(clickable) != nullptr)
+                {
+                    HandleCubeClick(gameState);
+                    break;
+                }
+                if (dynamic_cast<Text*>(clickable) != nullptr)
+                {
+                    HandleSaveClick(gameState);
+                    break; 
+                }
+            }
+        }
+    }
     pressedMouseButtons[button] = false;
+    
     // Reset click pos so that it's not used without user input
     clickX = -1;
     clickY = -1;
@@ -72,4 +109,30 @@ void InputManager::OnKeyPress(SDL_Scancode key) {
 
 void InputManager::OnKeyRelease(SDL_Scancode key) {
     pressedKeys[key] = false;
+}
+
+void InputManager::HandleItemClick(GameState* gameState) {
+    Item* clickedItem = Intersection::GetClickedItem(GameObject::ActiveGameObjects, GetClickPos());
+    if (clickedItem && clickedItem != nullptr) {
+        if (gameState->CubeCount >= clickedItem->GetItemCost()) {
+            gameState->CubeCount -= clickedItem->GetItemCost();
+            clickedItem->BuyItem(1);
+            gameState->UpdateItem(clickedItem);
+        }
+    }
+}
+
+void InputManager::HandleCubeClick(GameState* gameState)
+{
+    gameState->CubeCount++;
+}
+
+void InputManager::HandleSaveClick(GameState* gameState)
+{
+    SaveGameUtils::SaveGame(*gameState);
+}
+
+void InputManager::AddClickable(GameObject* clickable)
+{
+    clickables.push_back(clickable);
 }

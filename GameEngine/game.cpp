@@ -107,7 +107,9 @@ int main(int argc, char* args[])
     //Pool* clickFeedbackPool = new Pool(128, feedbackImage);
 
     // Create InputManager
-    InputManager inputManager;
+    InputManager inputManager(&gameState);
+    inputManager.AddClickable(saveText);
+    inputManager.AddClickable(cubeImage);
 
     SDL_Event e;
     bool quit = false;
@@ -152,38 +154,6 @@ int main(int argc, char* args[])
         // Update input manager
         inputManager.Update();
 
-        // Check for key presses
-        if (inputManager.IsKeyPressed(SDL_SCANCODE_S)) {
-            SaveGameUtils::SaveGame(gameState);
-        }
-
-        // Check for mouse clicks
-        if (inputManager.IsMouseButtonPressed(SDL_BUTTON_LEFT)) {
-            //If cube is clicked
-            if(Intersection::IntersectionMouseRect(cubeImage->Rect, inputManager.GetClickPos()))
-            {
-                gameState.CubeCount++;
-                inputManager.OnMouseButtonRelease(SDL_BUTTON_LEFT);
-            }
-
-            if(Intersection::IntersectionMouseRect(saveText->Rect, inputManager.GetClickPos())) {
-                SaveGameUtils::SaveGame(gameState);
-                inputManager.OnMouseButtonRelease(SDL_BUTTON_LEFT);
-            }
-
-            //If any GameObject is clicked
-            Item* ClickedItem = Intersection::GetClickedItem(GameObject::ActiveGameObjects, inputManager.GetClickPos());
-            if(ClickedItem && ClickedItem != nullptr) {
-                if(gameState.CubeCount >= ClickedItem->GetItemCost())
-                {
-                    gameState.CubeCount -= ClickedItem->GetItemCost();
-                    ClickedItem->BuyItem(1);
-                    gameState.UpdateItem(ClickedItem);
-                    inputManager.OnMouseButtonRelease(SDL_BUTTON_LEFT);
-                }
-            }
-        }
-        
         currencyText->SetText(std::to_string(gameState.CubeCount).c_str());
 
         currentCps = 0;
