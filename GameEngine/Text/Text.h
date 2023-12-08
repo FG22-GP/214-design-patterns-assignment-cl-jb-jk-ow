@@ -8,7 +8,7 @@
 class Text : public GameObject
 {
 public:
-    Text(Vector2 position, TextFactory textFactory, const char* fontURL, int fontSize, SDL_Color textColor, const char* text, SDL_Renderer* renderer);
+    Text(Vector2 position, TextFactory* textFactory, const char* fontURL, int fontSize, SDL_Color textColor, const char* text, SDL_Renderer* renderer);
 
     void SetColor(SDL_Color Color);
     void SetText(const char* NewText);

@@ -47,7 +47,7 @@ void InitializeSDL()
 	}
 }
 
-Item* CreateNewItem(const char* ItemName, TextFactory textfactory, int BaseValuePerSecond, int BaseCost, int CostMultiplierPerOwnedItem, Vector2 ItemRenderPosition, const char* ItemImageURL, Shop* ItemShop, SDL_Renderer* Renderer)
+Item* CreateNewItem(const char* ItemName, TextFactory* textfactory, int BaseValuePerSecond, int BaseCost, int CostMultiplierPerOwnedItem, Vector2 ItemRenderPosition, const char* ItemImageURL, Shop* ItemShop, SDL_Renderer* Renderer)
 {
     Image* newImage = new Image(Transform(ItemRenderPosition, Vector2(100, 100)), ItemImageURL, Renderer, WHITE);
     Text* newCostText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 45), textfactory, FONT_FUTURAMEDIUM_URL, 15, BLACK, "COSTS:", Renderer);
@@ -77,7 +77,7 @@ int main(int argc, char* args[])
     SDL_Texture* cursorTexture = IMG_LoadTexture(gameWindow->renderer, IMG_CURSOR_URL);
     Cursor* cursor = new Cursor(cursorTexture);
 
-    TextFactory textFactory;
+    TextFactory* textFactory = new TextFactory();
 
     // Create Game Objects
     Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer, WHITE);
