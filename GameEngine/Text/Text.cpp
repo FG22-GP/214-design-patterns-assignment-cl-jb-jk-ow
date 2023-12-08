@@ -2,16 +2,14 @@
 
 #include <string>
 
-#include "../Utilities/Consts.h"
-
-Text::Text(Vector2 position, const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer) : GameObject(Transform(position)) {
+Text::Text(Vector2 position, TextFactory textFactory, const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer) : GameObject(Transform(position)) {
     // load font
     backgroundColor = new SDL_Color{0, 0, 0, 0};
     renderer = newRenderer;
     color = textColor;
     text = newText;
     fontSize = newFontSize;
-    font = TTF_OpenFont(fontURL, newFontSize);
+    font = textFactory.GetFont(fontURL, fontSize);
 
     RefreshText();
 }
