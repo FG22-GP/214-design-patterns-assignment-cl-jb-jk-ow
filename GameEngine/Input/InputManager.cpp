@@ -4,7 +4,7 @@
 #include "../Text/Text.h"
 #include "../Utilities/GameObject.h"
 #include "../Utilities/Intersection.h"
-#include "../Utilities/GameState.h"'
+#include "../Utilities/GameState.h"
 #include "../Utilities/Item.h"
 #include "../Utilities/MathUtils.h"
 #include "../Utilities/SaveGameUtils.h"

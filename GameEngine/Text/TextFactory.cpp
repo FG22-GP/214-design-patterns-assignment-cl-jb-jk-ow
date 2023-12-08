@@ -8,7 +8,6 @@ TTF_Font* TextFactory::GetFont(const char* fontURL, int fontSize) {
 
     if(it != fontCache.end())
     {
-        printf("Found font\n");
         return it->second;
     }        
 
@@ -16,7 +15,6 @@ TTF_Font* TextFactory::GetFont(const char* fontURL, int fontSize) {
     
     if (font != nullptr) {
         fontCache[key] = font;
-        printf("Added new font\n");
     }
 
     return font;
