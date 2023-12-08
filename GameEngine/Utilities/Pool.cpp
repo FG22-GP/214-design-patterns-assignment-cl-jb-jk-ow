@@ -7,7 +7,9 @@
 
 Pool::Pool(int poolSize, SDL_Renderer* Renderer) {
     for (int i = 0; i < poolSize; i++) {
-        ObjectPool.push(new Image(Transform(Vector2(0, WINDOW_CENTER_Y - 0), Vector2(20, 20)), IMG_CUBE_URL, Renderer, MathUtils::GetRandomColor()));
+        Image* img = new Image(Transform(Vector2(0, WINDOW_CENTER_Y - 0), Vector2(20, 20)), IMG_CUBE_URL, Renderer, MathUtils::GetRandomColor());
+        ObjectPool.push(img);
+        img->Disable();
     }
         currentActiveObjects = 0;
 }

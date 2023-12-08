@@ -6,6 +6,7 @@
 #include "../Utilities/Intersection.h"
 #include "../Utilities/GameState.h"'
 #include "../Utilities/Item.h"
+#include "../Utilities/MathUtils.h"
 #include "../Utilities/SaveGameUtils.h"
 
 using namespace std;
@@ -86,6 +87,7 @@ void InputManager::OnMouseButtonRelease(Uint8 button)
                 if (clickablePair.second == "cube_button")
                 {
                     HandleCubeClick(gameState);
+                    dynamic_cast<Image*>(clickablePair.first)->SetColor(MathUtils::GetRandomColor());
                     break;
                 }
                 if (clickablePair.second == "save_button")
