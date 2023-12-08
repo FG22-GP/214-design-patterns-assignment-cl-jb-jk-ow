@@ -32,13 +32,16 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Image\Image.cpp" />
     <ClCompile Include="Text\TextFactory.cpp" />
+    <ClCompile Include="Utilities\FontURLs.cpp" />
     <ClCompile Include="Utilities\CubeRain.cpp" />
     <ClCompile Include="Utilities\Cursor.cpp" />
     <ClCompile Include="Utilities\GameObject.cpp" />
     <ClCompile Include="Utilities\Intersection.cpp" />
     <ClCompile Include="Utilities\Item.cpp" />
+    <ClCompile Include="Utilities\ItemFactory.cpp" />
     <ClCompile Include="Utilities\Pool.cpp" />
     <ClCompile Include="Utilities\SaveGameUtils.cpp" />
+    <ClCompile Include="Utilities\SDLUtils.cpp" />
     <ClCompile Include="Utilities\Shop.cpp" />
     <ClCompile Include="Window\Window.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -138,7 +141,9 @@
     <ClInclude Include="Utilities\ImageURLs.h" />
     <ClInclude Include="Utilities\Intersection.h" />
     <ClInclude Include="Utilities\Item.h" />
+    <ClInclude Include="Utilities\ItemFactory.h" />
     <ClInclude Include="Utilities\Pool.h" />
+    <ClInclude Include="Utilities\SDLUtils.h" />
     <ClInclude Include="Utilities\Shop.h" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>

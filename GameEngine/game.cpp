@@ -2,7 +2,6 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <SDL_image.h>
-#include <SDL_ttf.h>
 #include <string>
 #include <vector>
 
@@ -15,54 +14,19 @@
 #include "Utilities/Cursor.h"
 #include "Utilities/GameState.h"
 #include "Utilities/Pool.h"
-#include "Utilities/Intersection.h"
 #include "Utilities/Item.h"
 #include "Utilities/SaveGameUtils.h"
 #include "Utilities/Shop.h"
 #include "Utilities/CubeRain.h"
-
+#include "Utilities/ItemFactory.h"
+#include "Utilities/SDLUtils.h"
 #include "Window/Window.h"
 
 using namespace std;
 
-void InitializeSDL()
-{
-	// initialize SDL_Image for image loading
-	int imgFlags = IMG_INIT_PNG;
-	if (!(IMG_Init(imgFlags) & imgFlags))
-	{
-		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-	}
-
-	// initialize SDL_ttf for font loading
-	if (TTF_Init() == -1)
-	{
-		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
-	}
-
-	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO))
-	{
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-	}
-}
-
-Item* CreateNewItem(const char* ItemName, TextFactory* textfactory, int BaseValuePerSecond, int BaseCost, int CostMultiplierPerOwnedItem, Vector2 ItemRenderPosition, const char* ItemImageURL, Shop* ItemShop, SDL_Renderer* Renderer)
-{
-    Image* newImage = new Image(Transform(ItemRenderPosition, Vector2(100, 100)), ItemImageURL, Renderer, WHITE);
-    Text* newCostText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 45), textfactory, FONT_FUTURAMEDIUM_URL, 15, BLACK, "COSTS:", Renderer);
-    Text* newOwnedText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 25), textfactory, FONT_FUTURAMEDIUM_URL, 15, BLACK, "OWNED:", Renderer);
-    Item* newItem = new Item(ItemName, BaseValuePerSecond, BaseCost, CostMultiplierPerOwnedItem, newCostText, newOwnedText);
-    Text* newNameText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y), textfactory, FONT_FUTURAMEDIUM_URL, 17, BLACK, newItem->ItemName, Renderer);
-    newImage->SetItemReference(newItem);
-    ItemShop->AddNewShopItem(newItem);
-
-    return newItem;
-}
-
 int main(int argc, char* args[])
 {
-    InitializeSDL();
+    SDLUtils::InitializeSDL();
     
     //TODO: player stat manager thing instead?
     // Gameplay Variables
@@ -98,13 +62,11 @@ int main(int argc, char* args[])
     Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer, WHITE);
     Shop* squareMart = new Shop();
     
-    Item* item_SquarePants = CreateNewItem("Square Pants", textFactory, 1, 10, 2, Vector2(800, 65), IMG_SQUAREPANTS_URL, squareMart, gameWindow->renderer);
-    Item* item_Squire = CreateNewItem("Squire", textFactory, 5, 100, 2, Vector2(800, 175), IMG_SQUIRE_URL, squareMart, gameWindow->renderer);
-    Item* item_SquarePhoenix = CreateNewItem("Square Phoenix", textFactory, 25, 500, 3, Vector2(800, 285), IMG_SQUAREPHEONIX_URL, squareMart, gameWindow->renderer);
-    Item* item_SquareSpace = CreateNewItem("Square Space", textFactory, 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->renderer);
-    Item* item_SquareSquared = CreateNewItem("Square Squared", textFactory, 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->renderer);
-
-
+    Item* item_SquarePants = ItemFactory::CreateNewItem("Square Pants", textFactory, 1, 10, 2, Vector2(800, 65), IMG_SQUAREPANTS_URL, squareMart, gameWindow->renderer);
+    Item* item_Squire = ItemFactory::CreateNewItem("Squire", textFactory, 5, 100, 2, Vector2(800, 175), IMG_SQUIRE_URL, squareMart, gameWindow->renderer);
+    Item* item_SquarePhoenix = ItemFactory::CreateNewItem("Square Phoenix", textFactory, 25, 500, 3, Vector2(800, 285), IMG_SQUAREPHEONIX_URL, squareMart, gameWindow->renderer);
+    Item* item_SquareSpace = ItemFactory::CreateNewItem("Square Space", textFactory, 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->renderer);
+    Item* item_SquareSquared = ItemFactory::CreateNewItem("Square Squared", textFactory, 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->renderer);
 
     std::vector<Item*> items = {item_SquarePants, item_Squire, item_SquarePhoenix, item_SquareSpace, item_SquareSquared};
 
