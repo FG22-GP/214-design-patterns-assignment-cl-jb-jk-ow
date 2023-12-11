@@ -2,14 +2,11 @@
 #include <SDL_hints.h>
 
 //Constructor
-Window::Window(int width, int height, SDL_Color windowColor)
+Window::Window(int width, int height, SDL_Color windowColor, const char* windowTitle)
 {
     //Create Window and Renderer
-    SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_SHOWN, &window, &renderer);
-    if (!window)
-    {
-        printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-    }
+    window = SDL_CreateWindow(windowTitle, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     //Make the scaled rendering look smoother.
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");

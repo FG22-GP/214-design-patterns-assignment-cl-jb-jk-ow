@@ -13,6 +13,8 @@ public:
     void SetColor(SDL_Color Color);
     void SetText(const char* NewText);
     void SetBackgroundColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    const char* GetTextURL();
+    SDL_Renderer* GetRenderer();
 
     SDL_Color* backgroundColor;
     int fontSize;
@@ -24,4 +26,10 @@ public:
 
 protected:
     void RefreshText();
+
+private:
+
+    const char* URL;
+
+    SDL_Renderer* Renderer;
 };

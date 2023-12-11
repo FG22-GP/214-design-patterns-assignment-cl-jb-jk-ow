@@ -1,14 +1,18 @@
 #pragma once
 #include <queue>
-#include "GameObject.h"
 
-class Image;
+#include "../Text/Text.h"
 
-class Pool {
+class TextPool
+{
 public:
-    Pool(Image* image, int poolSize);
+    TextPool(Text* image, TextFactory* textFactory, int poolSize);
+    
     int currentActiveObjects;
+    
     GameObject* PoolGetObject();
+    
     void PoolReturnObject(GameObject* gameObject);
+    
     std::queue<GameObject*> ObjectPool;
 };

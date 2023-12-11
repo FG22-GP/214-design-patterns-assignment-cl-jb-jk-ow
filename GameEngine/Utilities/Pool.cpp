@@ -5,13 +5,13 @@
 #include "MathUtils.h"
 #include "../Image/Image.h"
 
-Pool::Pool(int poolSize, SDL_Renderer* Renderer) {
+Pool::Pool(Image* image, int poolSize) {
     for (int i = 0; i < poolSize; i++) {
-        Image* img = new Image(Transform(Vector2(0, WINDOW_CENTER_Y - 0), Vector2(20, 20)), IMG_CUBE_URL, Renderer, MathUtils::GetRandomColor());
+        Image* img = new Image(image->CurrentTransform, image->GetImageURL(), image->GetRenderer(), MathUtils::GetRandomColor());
         ObjectPool.push(img);
         img->Disable();
     }
-        currentActiveObjects = 0;
+    currentActiveObjects = 0;
 }
 
 GameObject* Pool::PoolGetObject() {

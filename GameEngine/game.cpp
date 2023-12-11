@@ -18,8 +18,12 @@
 #include "Utilities/SaveGameUtils.h"
 #include "Utilities/Shop.h"
 #include "Utilities/CubeRain.h"
+#include "Utilities/Intersection.h"
 #include "Utilities/ItemFactory.h"
+#include "Utilities/MathUtils.h"
 #include "Utilities/SDLUtils.h"
+#include "Utilities/TextPool.h"
+#include "VFX/ClickVFX.h"
 #include "Window/Window.h"
 
 using namespace std;
@@ -35,7 +39,7 @@ int main(int argc, char* args[])
     int currentCps = 0;
     
     // Create Window and Renderer
-    Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE);
+    Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE ,"CubeClicker");
 
     // Create Cursor
     SDL_Texture* cursorTexture = IMG_LoadTexture(gameWindow->renderer, IMG_CURSOR_URL);
@@ -47,8 +51,15 @@ int main(int argc, char* args[])
     Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer, WHITE);
     
     //Create Pool and CubeRain asset (cuberain asset is to make use of the pool)
-    Pool* rainObjPool = new Pool(2000, gameWindow->renderer);
+    Image* cubeRainImg = new Image(Transform(Vector2(0, WINDOW_CENTER_Y - 0), Vector2(20, 20)), IMG_CUBE_URL, gameWindow->renderer, MathUtils::GetRandomColor());
+    cubeRainImg->Disable();
+    Pool* rainObjPool = new Pool(cubeRainImg, 2000);
     CubeRain* cubeRain = new CubeRain();
+
+    Text* clickText = new Text(Vector2(0, 0), textFactory, FONT_FUTURAMEDIUM_URL, 35, WHITE, "+1", gameWindow->renderer);
+    clickText->Disable();
+    TextPool* clickTextPool = new TextPool(clickText, textFactory, 100);
+    ClickVFX* clickVFX = new ClickVFX(clickTextPool, 100);
     
     Image* cubeImage = new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer, WHITE);
     Image* currencyCubeImage = new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer, WHITE);
@@ -119,6 +130,14 @@ int main(int argc, char* args[])
             }
         }
 
+        //TODO will remove this, could not think of another implementation. Would be nice to create specific button class for save and click cube with OnClick() or something! :)
+        if(inputManager.IsMouseButtonPressed(SDL_BUTTON_LEFT) && Intersection::IntersectionMouseRect(cubeImage->Rect, inputManager.GetClickPos()))
+        {
+            clickVFX->OnClick();
+            //This makes the cube change color twice, will remove :(
+            inputManager.OnMouseButtonRelease(SDL_BUTTON_LEFT);
+        }
+        
         // Update input manager
         inputManager.Update();
 
@@ -156,6 +175,7 @@ int main(int argc, char* args[])
         //cube rain, and cuberain amt calc
         int cubeRainLimit = static_cast<int>(std::round(static_cast<double>(currentCps) / 50.0));
         cubeRain->Update(rainObjPool, cubeRainLimit);
+        clickVFX->Update();
 
         cursor->UpdateCursor();
         cursor->RenderCursor(gameWindow->renderer);

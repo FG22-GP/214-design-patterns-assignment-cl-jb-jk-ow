@@ -88,6 +88,7 @@ void InputManager::OnMouseButtonRelease(Uint8 button)
                 {
                     HandleCubeClick(gameState);
                     dynamic_cast<Image*>(clickablePair.first)->SetColor(MathUtils::GetRandomColor());
+                    
                     break;
                 }
                 if (clickablePair.second == "save_button")

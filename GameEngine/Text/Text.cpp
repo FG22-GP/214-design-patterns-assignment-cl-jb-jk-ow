@@ -7,9 +7,12 @@ Text::Text(Vector2 position, TextFactory* textFactory, const char* fontURL, int 
     backgroundColor = new SDL_Color{0, 0, 0, 0};
     renderer = newRenderer;
     color = textColor;
+    color.a = 255;
     text = newText;
     fontSize = newFontSize;
     font = textFactory->GetFont(fontURL, fontSize);
+    URL = fontURL;
+    Renderer = newRenderer;
 
     RefreshText();
 }
@@ -75,4 +78,14 @@ void Text::RefreshText()
         width,
         height 
     };
+}
+
+const char* Text::GetTextURL()
+{
+    return URL;
+}
+
+SDL_Renderer* Text::GetRenderer()
+{
+    return Renderer;
 }
