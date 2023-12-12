@@ -6,12 +6,11 @@
 
 #include "../Utilities/GameState.h"
 #include "../Utilities/IClickObserver.h"
+#include "../Utilities/IObservable.h"
 
 class GameObject;
 
-using namespace std;
-
-class InputManager {
+class InputManager : public IObservable {
 public:
     // Constructor
     InputManager(GameState* gs);
@@ -35,11 +34,11 @@ public:
     int GetMouseY() const;
 
     // Get current mouse position
-    vector<int> GetMousePos() const;
+    std::vector<int> GetMousePos() const;
 
     //Get position of click
     //Will only return valid values if left click is pressed
-    vector<int> GetClickPos() const;
+    std::vector<int> GetClickPos() const;
 
     // Handle key press
     void OnKeyPress(SDL_Scancode key);
@@ -61,16 +60,22 @@ public:
 
     void AddClickable(GameObject* clickable, std::string name);
 
-    void AddObserver(IClickObserver* observer);
+    //IObservable
+    void AddObserver(const std::string& id, IClickObserver* observer) override;
+
+    void RemoveObserver(const std::string& id) override;
+
+    void NotifyObserver(const std::string& id) override;
+    
+    void NotifyAll() override;
     
 private:
     const Uint8* keyStates;  // Array of current key states
     int mouseX, mouseY;      // Current mouse position
     int clickX, clickY;      // Coords of last click
-    unordered_map<SDL_Scancode, bool> pressedKeys;  // Hashset to store pressed keys
-    unordered_map<Uint8, bool> pressedMouseButtons; // Hashset to store pressed mouse buttons
-    unordered_map<GameObject*, std::string> clickables;
+    std::unordered_map<SDL_Scancode, bool> pressedKeys;  // Hashset to store pressed keys
+    std::unordered_map<Uint8, bool> pressedMouseButtons; // Hashset to store pressed mouse buttons
+    std::unordered_map<GameObject*, std::string> clickables;
     GameState* gameState;
-    std::vector<IClickObserver*> observers;
 };
 

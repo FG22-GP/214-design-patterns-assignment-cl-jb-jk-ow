@@ -89,7 +89,7 @@ int main(int argc, char* args[])
     InputManager inputManager(&gameState);
     inputManager.AddClickable(saveText, "save_button");
     inputManager.AddClickable(cubeImage, "cube_button");
-    inputManager.AddObserver(clickVFX);
+    inputManager.AddObserver("click_vfx", clickVFX);
 
     SDL_Event e;
     bool quit = false;
