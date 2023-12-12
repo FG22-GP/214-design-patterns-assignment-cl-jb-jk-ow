@@ -10,6 +10,11 @@
 class TextPool;
 
 
+void ClickVFX::OnNotify()
+{
+  OnClick();  
+}
+
 ClickVFX::ClickVFX(TextPool* poolToUpdate, int currentSpawnLimit)
 {
     pool = poolToUpdate;

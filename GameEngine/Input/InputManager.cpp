@@ -88,6 +88,10 @@ void InputManager::OnMouseButtonRelease(Uint8 button)
                 {
                     HandleCubeClick(gameState);
                     dynamic_cast<Image*>(clickablePair.first)->SetColor(MathUtils::GetRandomColor());
+                    for (auto observer : observers)
+                    {
+                        observer->OnNotify();
+                    }
                     
                     break;
                 }
@@ -138,4 +142,9 @@ void InputManager::HandleSaveClick(GameState* gameState)
 void InputManager::AddClickable(GameObject* clickable, std::string name)
 {
     clickables.emplace(clickable, name);
+}
+
+void InputManager::AddObserver(IClickObserver* observer)
+{
+    observers.push_back(observer);
 }

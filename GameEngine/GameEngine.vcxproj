@@ -36,6 +36,7 @@
     <ClCompile Include="Utilities\CubeRain.cpp" />
     <ClCompile Include="Utilities\Cursor.cpp" />
     <ClCompile Include="Utilities\GameObject.cpp" />
+    <ClCompile Include="Utilities\IClickObserver.cpp" />
     <ClCompile Include="Utilities\Intersection.cpp" />
     <ClCompile Include="Utilities\Item.cpp" />
     <ClCompile Include="Utilities\ItemFactory.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Utilities\Cursor.h" />
     <ClInclude Include="Utilities\GameObject.h" />
     <ClInclude Include="Utilities\GameState.h" />
+    <ClInclude Include="Utilities\IClickObserver.h" />
     <ClInclude Include="Utilities\ImageURLs.h" />
     <ClInclude Include="Utilities\Intersection.h" />
     <ClInclude Include="Utilities\Item.h" />

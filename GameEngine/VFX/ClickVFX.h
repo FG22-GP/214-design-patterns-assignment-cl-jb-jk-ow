@@ -1,14 +1,17 @@
 #pragma once
 #include <vector>
 
+#include "../Utilities/IClickObserver.h"
+
 class TextPool;
 class GameObject;
 
 using namespace std;
-class ClickVFX
+class ClickVFX : public IClickObserver
 {
 public:
 
+    void OnNotify() override;
     
     ClickVFX(TextPool* poolToUpdate, int currentSpawnLimit);
     

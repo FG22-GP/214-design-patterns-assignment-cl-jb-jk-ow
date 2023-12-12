@@ -89,6 +89,7 @@ int main(int argc, char* args[])
     InputManager inputManager(&gameState);
     inputManager.AddClickable(saveText, "save_button");
     inputManager.AddClickable(cubeImage, "cube_button");
+    inputManager.AddObserver(clickVFX);
 
     SDL_Event e;
     bool quit = false;
@@ -128,14 +129,6 @@ int main(int argc, char* args[])
                     inputManager.OnMouseButtonRelease(e.button.button);
                 } break;
             }
-        }
-
-        //TODO will remove this, could not think of another implementation. Would be nice to create specific button class for save and click cube with OnClick() or something! :)
-        if(inputManager.IsMouseButtonPressed(SDL_BUTTON_LEFT) && Intersection::IntersectionMouseRect(cubeImage->Rect, inputManager.GetClickPos()))
-        {
-            clickVFX->OnClick();
-            //This makes the cube change color twice, will remove :(
-            inputManager.OnMouseButtonRelease(SDL_BUTTON_LEFT);
         }
         
         // Update input manager

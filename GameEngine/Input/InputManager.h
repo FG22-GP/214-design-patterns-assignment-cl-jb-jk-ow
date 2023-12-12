@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../Utilities/GameState.h"
+#include "../Utilities/IClickObserver.h"
 
 class GameObject;
 
@@ -59,6 +60,8 @@ public:
     void HandleSaveClick(GameState* gameState);
 
     void AddClickable(GameObject* clickable, std::string name);
+
+    void AddObserver(IClickObserver* observer);
     
 private:
     const Uint8* keyStates;  // Array of current key states
@@ -68,5 +71,6 @@ private:
     unordered_map<Uint8, bool> pressedMouseButtons; // Hashset to store pressed mouse buttons
     unordered_map<GameObject*, std::string> clickables;
     GameState* gameState;
+    std::vector<IClickObserver*> observers;
 };
 
