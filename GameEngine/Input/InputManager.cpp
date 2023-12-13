@@ -76,7 +76,7 @@ void InputManager::OnMouseButtonRelease(Uint8 button)
 
         for (const auto& [first, second] : observers)
         {
-            if (Intersection::IntersectionMouseRect(second->GetRect(), { mouseX, mouseY })) {
+            if (second->GetRect() && Intersection::IntersectionMouseRect(second->GetRect(), { mouseX, mouseY })) {
                 // Handle the click based on the type of GameObject
                 if (first == "cube_button")
                 {
