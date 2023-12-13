@@ -5,7 +5,7 @@
 #include "MathUtils.h"
 #include "../Image/Image.h"
 
-Pool::Pool(Image* image, int poolSize) {
+Pool::Pool(std::shared_ptr<Image> image, int poolSize) {
     for (int i = 0; i < poolSize; i++) {
         Image* img = new Image(image->CurrentTransform, image->GetImageURL(), image->GetRenderer(), MathUtils::GetRandomColor());
         ObjectPool.push(img);

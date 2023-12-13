@@ -32,54 +32,53 @@ int main(int argc, char* args[])
 {
     SDLUtils::InitializeSDL();
     
-    //TODO: player stat manager thing instead?
     // Gameplay Variables
     float cpsTimer = 0;
     //Calculate CPS from items
     int currentCps = 0;
     
     // Create Window and Renderer
-    Window* gameWindow = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE ,"CubeClicker");
+    std::unique_ptr<Window> gameWindow(new Window(WINDOW_WIDTH, WINDOW_HEIGHT, WHITE ,"CubeClicker"));
 
     // Create Cursor
-    SDL_Texture* cursorTexture = IMG_LoadTexture(gameWindow->renderer, IMG_CURSOR_URL);
-    Cursor* cursor = new Cursor(cursorTexture);
+    std::shared_ptr<SDL_Texture> cursorTexture(IMG_LoadTexture(gameWindow->renderer, IMG_CURSOR_URL));
+    std::unique_ptr<Cursor> cursor(new Cursor(cursorTexture));
 
-    TextFactory* textFactory = new TextFactory();
+    std::shared_ptr<TextFactory> textFactory(new TextFactory());
 
     // Create Game Objects
-    Image* backgroundFogImage = new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer, WHITE);
+    std::unique_ptr<Image> backgroundFogImage(new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer, WHITE));
     
     //Create Pool and CubeRain asset (cuberain asset is to make use of the pool)
-    Image* cubeRainImg = new Image(Transform(Vector2(0, WINDOW_CENTER_Y - 0), Vector2(20, 20)), IMG_CUBE_URL, gameWindow->renderer, MathUtils::GetRandomColor());
+    std::shared_ptr<Image> cubeRainImg(new Image(Transform(Vector2(0, WINDOW_CENTER_Y - 0), Vector2(20, 20)), IMG_CUBE_URL, gameWindow->renderer, MathUtils::GetRandomColor()));
     cubeRainImg->Disable();
-    Pool* rainObjPool = new Pool(cubeRainImg, 2000);
-    CubeRain* cubeRain = new CubeRain();
+    std::shared_ptr<Pool> rainObjPool(new Pool(cubeRainImg, 2000));
+    std::unique_ptr<CubeRain> cubeRain(new CubeRain());
 
-    Text* clickText = new Text(Vector2(0, 0), textFactory, FONT_FUTURAMEDIUM_URL, 35, WHITE, "+1", gameWindow->renderer);
+    std::shared_ptr<Text> clickText(new Text(Vector2(0, 0), textFactory, FONT_FUTURAMEDIUM_URL, 35, WHITE, "+1", gameWindow->renderer));
     clickText->Disable();
-    TextPool* clickTextPool = new TextPool(clickText, textFactory, 100);
-    ClickVFX* clickVFX = new ClickVFX(clickTextPool, 100);
+    std::shared_ptr<TextPool> clickTextPool(new TextPool(clickText, textFactory, 100));
+    std::shared_ptr<ClickVFX> clickVFX(new ClickVFX(clickTextPool, 100));
     
-    Image* cubeImage = new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer, WHITE);
-    Image* currencyCubeImage = new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer, WHITE);
-    Image* cpsCubeImage = new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer, WHITE);
-    Text* currencyText = new Text(Vector2(100, 25), textFactory, FONT_FUTURAMEDIUM_URL, 40, WHITE, " ", gameWindow->renderer); //text is a space
-    Text* cpsText = new Text(Vector2(350, 595), textFactory, FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer);
-    Text* saveText = new Text(Vector2(25, WINDOW_HEIGHT - 80), textFactory, FONT_FUTURAMEDIUM_URL, 30, WHITE, "Save Game", gameWindow->renderer);
+    std::shared_ptr<Image> cubeImage(new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer, WHITE));
+    std::shared_ptr<Image> currencyCubeImage(new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer, WHITE));
+    std::shared_ptr<Image> cpsCubeImage(new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer, WHITE));
+    std::shared_ptr<Text> currencyText(new Text(Vector2(100, 25), textFactory, FONT_FUTURAMEDIUM_URL, 40, WHITE, " ", gameWindow->renderer)); //text is a space
+    std::shared_ptr<Text> cpsText(new Text(Vector2(350, 595), textFactory, FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer));
+    std::shared_ptr<Text> saveText(new Text(Vector2(25, WINDOW_HEIGHT - 80), textFactory, FONT_FUTURAMEDIUM_URL, 30, WHITE, "Save Game", gameWindow->renderer));
     saveText->SetBackgroundColor(50, 50, 50, 1);
     
     //Create Shop & Items
-    Image* squareMartBackgroundImage = new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer, WHITE);
-    Shop* squareMart = new Shop();
+    std::unique_ptr<Image> squareMartBackgroundImage(new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer, WHITE));
+    std::shared_ptr<Shop> squareMart(new Shop());
     
-    Item* item_SquarePants = ItemFactory::CreateNewItem("Square Pants", textFactory, 1, 10, 2, Vector2(800, 65), IMG_SQUAREPANTS_URL, squareMart, gameWindow->renderer);
-    Item* item_Squire = ItemFactory::CreateNewItem("Squire", textFactory, 5, 100, 2, Vector2(800, 175), IMG_SQUIRE_URL, squareMart, gameWindow->renderer);
-    Item* item_SquarePhoenix = ItemFactory::CreateNewItem("Square Phoenix", textFactory, 25, 500, 3, Vector2(800, 285), IMG_SQUAREPHEONIX_URL, squareMart, gameWindow->renderer);
-    Item* item_SquareSpace = ItemFactory::CreateNewItem("Square Space", textFactory, 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->renderer);
-    Item* item_SquareSquared = ItemFactory::CreateNewItem("Square Squared", textFactory, 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->renderer);
+    std::shared_ptr<Item> item_SquarePants(ItemFactory::CreateNewItem("Square Pants", textFactory, 1, 10, 2, Vector2(800, 65), IMG_SQUAREPANTS_URL, squareMart, gameWindow->renderer));
+    std::shared_ptr<Item> item_Squire(ItemFactory::CreateNewItem("Squire", textFactory, 5, 100, 2, Vector2(800, 175), IMG_SQUIRE_URL, squareMart, gameWindow->renderer));
+    std::shared_ptr<Item> item_SquarePhoenix(ItemFactory::CreateNewItem("Square Phoenix", textFactory, 25, 500, 3, Vector2(800, 285), IMG_SQUAREPHEONIX_URL, squareMart, gameWindow->renderer));
+    std::shared_ptr<Item> item_SquareSpace(ItemFactory::CreateNewItem("Square Space", textFactory, 100, 2000, 3, Vector2(800, 395), IMG_SQUARESPACE_URL, squareMart, gameWindow->renderer));
+    std::shared_ptr<Item> item_SquareSquared(ItemFactory::CreateNewItem("Square Squared", textFactory, 1000, 25000, 5, Vector2(800, 505), IMG_SQUARESQUARED_URL, squareMart, gameWindow->renderer));
 
-    std::vector<Item*> items = {item_SquarePants, item_Squire, item_SquarePhoenix, item_SquareSpace, item_SquareSquared};
+    std::vector<shared_ptr<Item>> items = {item_SquarePants, item_Squire, item_SquarePhoenix, item_SquareSpace, item_SquareSquared};
 
     GameState gameState = SaveGameUtils::LoadGame(items);
 
@@ -149,17 +148,18 @@ int main(int argc, char* args[])
         }
         cpsText->SetText(std::to_string(currentCps).append("/cps").c_str());
 
+        // TODO: Use if to be used : Nuke if not
         // Update all active game object
-        for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
+        /*for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
         {
             activeGameObject->Update();
-        }
+        }*/
 
         // Clear the renderer
         gameWindow->Clear();
 
         // Render all active game objects
-        for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
+        for (std::shared_ptr<GameObject> activeGameObject : GameObject::ActiveGameObjects)
         {
             gameWindow->Render(activeGameObject);
         }

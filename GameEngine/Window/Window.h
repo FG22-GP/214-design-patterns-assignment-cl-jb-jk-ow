@@ -27,7 +27,7 @@ public:
 	
 	bool WasSuccessful() { return createdWindowSuccessfully; }
 	
-	void Render(GameObject* gameObject);
+	void Render(std::shared_ptr<GameObject> gameObject);
 	void Clear();
 	void Present();
 	std::unique_ptr<Image> LoadImage(const char* path);

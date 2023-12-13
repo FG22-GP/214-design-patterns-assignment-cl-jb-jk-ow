@@ -13,11 +13,11 @@ struct GameState
     int CubeCount;
     std::vector<std::tuple<std::string, int>> AutoClickers;
 
-    Item* FindItemByName(const std::vector<Item*> items, std::string name);
+    std::shared_ptr<Item> FindItemByName(const std::vector<std::shared_ptr<Item>> items, std::string name);
 
     void UpdateItem(Item* item);
 
-    void SetItemValuesFromSave(std::vector<Item*> items);
+    void SetItemValuesFromSave(std::vector<std::shared_ptr<Item>> items);
 };
 
 inline void GameState::UpdateItem(Item* item)
@@ -36,8 +36,8 @@ inline void GameState::UpdateItem(Item* item)
     AutoClickers.push_back(std::make_tuple(item->ItemName, item->OwnedAmount));
 }
 
-inline Item* GameState::FindItemByName(const std::vector<Item*> items, std::string name) {
-    for (Item* item : items) {
+inline std::shared_ptr<Item> GameState::FindItemByName(const std::vector<std::shared_ptr<Item>> items, std::string name) {
+    for (std::shared_ptr<Item> item : items) {
         if (item->ItemName == name) {
             return item;
         }
@@ -45,14 +45,15 @@ inline Item* GameState::FindItemByName(const std::vector<Item*> items, std::stri
     return nullptr; // Item not found
 }
 
-inline void GameState::SetItemValuesFromSave(std::vector<Item*> items)
+inline void GameState::SetItemValuesFromSave(std::vector<std::shared_ptr<Item>> items)
 {
     for (auto autoClicker : AutoClickers) {
         const std::string itemName = std::get<0>(autoClicker);
         const int ownedAmount = std::get<1>(autoClicker);
 
+        //TODO: check if we can remove raw ptr
         // Find the corresponding item
-        Item* item = FindItemByName(items, itemName);
+        Item* item = FindItemByName(items, itemName).get();
 
         if (item) {
             item->OwnedAmount = ownedAmount;

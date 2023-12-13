@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <vector>
 
 #include "../Utilities/IClickObserver.h"
@@ -13,7 +14,7 @@ public:
 
     void OnNotify() override;
     
-    ClickVFX(TextPool* poolToUpdate, int currentSpawnLimit);
+    ClickVFX(shared_ptr<TextPool> poolToUpdate, int currentSpawnLimit);
     
     void Update();
 

@@ -1,8 +1,9 @@
 #include "Text.h"
 
+#include <memory>
 #include <string>
 
-Text::Text(Vector2 position, TextFactory* textFactory, const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer) : GameObject(Transform(position)) {
+Text::Text(Vector2 position, std::shared_ptr<TextFactory> textFactory, const char* fontURL, int newFontSize, SDL_Color textColor, const char* newText, SDL_Renderer* newRenderer) : GameObject(Transform(position)) {
     // load font
     backgroundColor = new SDL_Color{0, 0, 0, 0};
     renderer = newRenderer;

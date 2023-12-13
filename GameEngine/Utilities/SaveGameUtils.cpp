@@ -25,7 +25,7 @@ void SaveGameUtils::SaveGame(const GameState& gameState) {
     }
 }
 
-GameState SaveGameUtils::LoadGame(std::vector<Item*>& items) {
+GameState SaveGameUtils::LoadGame(std::vector<std::shared_ptr<Item>>& items) {
     std::ifstream stream;
     const std::string filename = "save.txt";
 
@@ -47,8 +47,9 @@ GameState SaveGameUtils::LoadGame(std::vector<Item*>& items) {
                 const char* itemName = itemNameStr.c_str();
                 int ownedAmount = std::stoi(line.substr(line.find(": ") + 2));
 
+                //TODO: check if we can remove raw ptr
                 // Populate the vector of tuples with info from save file
-                Item* item = gameState.FindItemByName(items, itemName);
+                Item* item = gameState.FindItemByName(items, itemName).get();
 
                 if (item) {
                     gameState.AutoClickers.emplace_back(itemName, ownedAmount);

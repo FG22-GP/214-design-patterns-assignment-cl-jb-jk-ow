@@ -2,9 +2,9 @@
 
 #include <SDL_mouse.h>
 
-Cursor::Cursor(SDL_Texture* cursorTexture)
+Cursor::Cursor(std::shared_ptr<SDL_Texture> cursorTexture)
 {
-    CursorTexture = cursorTexture;
+    CursorTexture = cursorTexture.get();
 
     Rect.w = 20;
     Rect.h = 20;

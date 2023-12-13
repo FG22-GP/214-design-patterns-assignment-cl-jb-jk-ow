@@ -19,7 +19,7 @@ Window::Window(int width, int height, SDL_Color windowColor, const char* windowT
 //Deconstructor
 Window::~Window() = default;
 
-void Window::Render(GameObject* gameObject)
+void Window::Render(std::shared_ptr<GameObject> gameObject)
 {
     SDL_RenderCopy(renderer, gameObject->Texture, nullptr, gameObject->Rect);
 }

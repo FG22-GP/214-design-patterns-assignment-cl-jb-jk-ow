@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <SDL.h>
 #include <unordered_map>
 #include <vector>
@@ -58,10 +59,10 @@ public:
 
     void HandleSaveClick(GameState* gameState);
 
-    void AddClickable(GameObject* clickable, std::string name);
+    void AddClickable(std::shared_ptr<GameObject> clickable, std::string name);
 
     //IObservable
-    void AddObserver(const std::string& id, IClickObserver* observer) override;
+    void AddObserver(const std::string& id, std::shared_ptr<IClickObserver> observer) override;
 
     void RemoveObserver(const std::string& id) override;
 
@@ -75,7 +76,7 @@ private:
     int clickX, clickY;      // Coords of last click
     std::unordered_map<SDL_Scancode, bool> pressedKeys;  // Hashset to store pressed keys
     std::unordered_map<Uint8, bool> pressedMouseButtons; // Hashset to store pressed mouse buttons
-    std::unordered_map<GameObject*, std::string> clickables;
+    std::unordered_map<std::shared_ptr<GameObject>, std::string> clickables;
     GameState* gameState;
 };
 

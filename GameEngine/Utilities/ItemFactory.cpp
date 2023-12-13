@@ -6,7 +6,7 @@
 #include "FontURLs.h"
 
 
-Item* ItemFactory::CreateNewItem(const char* ItemName, TextFactory* textfactory, int BaseValuePerSecond, int BaseCost, int CostMultiplierPerOwnedItem, Vector2 ItemRenderPosition, const char* ItemImageURL, Shop* ItemShop, SDL_Renderer* Renderer)
+Item* ItemFactory::CreateNewItem(const char* ItemName, std::shared_ptr<TextFactory> textfactory, int BaseValuePerSecond, int BaseCost, int CostMultiplierPerOwnedItem, Vector2 ItemRenderPosition, const char* ItemImageURL, std::shared_ptr<Shop> ItemShop, SDL_Renderer* Renderer)
 {
     Image* newImage = new Image(Transform(ItemRenderPosition, Vector2(100, 100)), ItemImageURL, Renderer, WHITE);
     Text* newCostText = new Text(Vector2(100 + ItemRenderPosition.X, ItemRenderPosition.Y + 45), textfactory, FONT_FUTURAMEDIUM_URL, 15, BLACK, "COSTS:", Renderer);

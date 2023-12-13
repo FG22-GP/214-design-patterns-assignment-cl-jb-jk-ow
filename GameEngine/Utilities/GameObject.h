@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <vector>
 #include <SDL_render.h>
 #include "Item.h"
@@ -18,7 +19,7 @@ public:
     Vector2 Scale;
 };
 
-class GameObject {
+class GameObject : std::enable_shared_from_this<GameObject>{
 public:
     GameObject(Transform transform);
     
@@ -31,7 +32,7 @@ public:
 
     void SetPosition(Vector2 position);
     
-    static std::vector<GameObject*> ActiveGameObjects;
+    static std::vector<std::shared_ptr<GameObject>> ActiveGameObjects;
     SDL_Texture* Texture;
     SDL_Rect* Rect;
     Transform CurrentTransform;

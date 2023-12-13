@@ -6,7 +6,7 @@
 class TextPool
 {
 public:
-    TextPool(Text* image, TextFactory* textFactory, int poolSize);
+    TextPool(std::shared_ptr<Text> text, std::shared_ptr<TextFactory> textFactory, int poolSize);
     
     int currentActiveObjects;
     

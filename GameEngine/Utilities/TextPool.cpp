@@ -2,7 +2,7 @@
 
 #include "MathUtils.h"
 
-TextPool::TextPool(Text* text, TextFactory* textFactory, int poolSize)
+TextPool::TextPool(std::shared_ptr<Text> text, std::shared_ptr<TextFactory> textFactory, int poolSize)
 {
     for (int i = 0; i < poolSize; i++) {
         Text* txt = new Text(text->CurrentTransform.Position, textFactory, text->GetTextURL(), text->fontSize, text->color, text->text, text->GetRenderer());

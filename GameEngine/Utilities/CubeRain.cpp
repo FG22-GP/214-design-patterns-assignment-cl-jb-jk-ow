@@ -6,7 +6,7 @@
 CubeRain::CubeRain() {
 }
 
-void CubeRain::Update(Pool* poolToUpdate, int currentSpawnLimit) {
+void CubeRain::Update(std::shared_ptr<Pool> poolToUpdate, int currentSpawnLimit) {
     //printf("current active: %d\n", poolToUpdate->currentActiveObjects);
     if (poolToUpdate->currentActiveObjects < currentSpawnLimit) {
         GameObject* Obj = poolToUpdate->PoolGetObject();

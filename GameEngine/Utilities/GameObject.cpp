@@ -3,7 +3,7 @@
 #include "MathUtils.h"
 #include "../Utilities/Consts.h"
 
-std::vector<GameObject*> GameObject::ActiveGameObjects;
+std::vector<std::shared_ptr<GameObject>> GameObject::ActiveGameObjects;
 
 Transform::Transform()
 {

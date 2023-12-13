@@ -3,7 +3,6 @@
 #include <SDL_mouse.h>
 
 #include "../Input/InputManager.h"
-#include "../Utilities/Consts.h"
 #include "../Utilities/Intersection.h"
 #include "../Utilities/TextPool.h"
 
@@ -15,9 +14,9 @@ void ClickVFX::OnNotify()
   OnClick();  
 }
 
-ClickVFX::ClickVFX(TextPool* poolToUpdate, int currentSpawnLimit)
+ClickVFX::ClickVFX(std::shared_ptr<TextPool> poolToUpdate, int currentSpawnLimit)
 {
-    pool = poolToUpdate;
+    pool = poolToUpdate.get();
     limit = currentSpawnLimit;
 }
 
