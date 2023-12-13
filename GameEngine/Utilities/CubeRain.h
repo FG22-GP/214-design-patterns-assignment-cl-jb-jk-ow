@@ -6,5 +6,5 @@ class CubeRain {
 public:
     CubeRain();
     void Update(std::shared_ptr<Pool> poolToUpdate, int currentSpawnLimit);
-    std::vector<GameObject*> ActivePoolObjects;
+    std::vector<std::shared_ptr<GameObject>> ActivePoolObjects;
 };
