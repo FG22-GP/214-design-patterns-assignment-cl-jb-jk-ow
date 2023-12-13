@@ -26,8 +26,8 @@ void Text::SetColor(SDL_Color Color)
 
 void Text::SetText(const char* NewText)
 {
-    text = NewText;
-    RefreshText();
+        text = NewText;
+        RefreshText();
 }
 
 void Text::SetBackgroundColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
@@ -58,7 +58,10 @@ void Text::RefreshText()
         SDL_FreeSurface(textSurface);
         textSurface = textBGSurface;
     }
-    
+
+    if (Texture != nullptr) {
+        SDL_DestroyTexture(Texture);
+    }
     // Create texture GPU-stored texture from surface pixels
     Texture = SDL_CreateTextureFromSurface(renderer, textSurface);
     
