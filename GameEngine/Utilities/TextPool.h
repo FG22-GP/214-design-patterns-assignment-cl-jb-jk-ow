@@ -10,9 +10,9 @@ public:
     
     int currentActiveObjects;
     
-    GameObject* PoolGetObject();
+    std::shared_ptr<Text> PoolGetObject();
     
-    void PoolReturnObject(GameObject* gameObject);
+    void PoolReturnObject(std::shared_ptr<Text> gameObject);
     
-    std::queue<GameObject*> ObjectPool;
+    std::queue<std::shared_ptr<Text>> ObjectPool;
 };

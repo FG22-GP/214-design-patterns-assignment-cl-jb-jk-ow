@@ -18,13 +18,13 @@
 #include "Utilities/SaveGameUtils.h"
 #include "Utilities/Shop.h"
 #include "Utilities/CubeRain.h"
-#include "Utilities/Intersection.h"
 #include "Utilities/ItemFactory.h"
 #include "Utilities/MathUtils.h"
 #include "Utilities/SDLUtils.h"
 #include "Utilities/TextPool.h"
 #include "VFX/ClickVFX.h"
 #include "Window/Window.h"
+#include "Utilities/GameObjectFactory.h"
 
 using namespace std;
 
@@ -47,16 +47,20 @@ int main(int argc, char* args[])
     std::shared_ptr<TextFactory> textFactory(new TextFactory());
 
     // Create Game Objects
-    std::unique_ptr<Image> backgroundFogImage(new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer, WHITE));
+    //std::unique_ptr<Image> backgroundFogImage(new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer, WHITE));
+
+    //std::shared_ptr<GameObjectFactory> GoFactory(new GameObjectFactory);
+    //std::shared_ptr<Image> BackgroungImage = GoFactory->ConstructGameObject(new Image(Transform(Vector2(0, 0), Vector2(WINDOW_WIDTH, WINDOW_HEIGHT)), IMG_BACKGROUNDFOG_URL, gameWindow->renderer, WHITE));
+    
     
     //Create Pool and CubeRain asset (cuberain asset is to make use of the pool)
-    std::shared_ptr<Image> cubeRainImg(new Image(Transform(Vector2(0, WINDOW_CENTER_Y - 0), Vector2(20, 20)), IMG_CUBE_URL, gameWindow->renderer, MathUtils::GetRandomColor()));
-    cubeRainImg->Disable();
-    std::shared_ptr<Pool> rainObjPool(new Pool(cubeRainImg, 2000));
-    std::unique_ptr<CubeRain> cubeRain(new CubeRain());
+    // std::shared_ptr<Image> cubeRainImg(new Image(Transform(Vector2(0, WINDOW_CENTER_Y - 0), Vector2(20, 20)), IMG_CUBE_URL, gameWindow->renderer, MathUtils::GetRandomColor()));
+    // GameObjectFactory::Disable(cubeRainImg);
+    // std::shared_ptr<Pool> rainObjPool(new Pool(cubeRainImg, 2000, GoFactory));
+    // std::unique_ptr<CubeRain> cubeRain(new CubeRain());
 
     std::shared_ptr<Text> clickText(new Text(Vector2(0, 0), textFactory, FONT_FUTURAMEDIUM_URL, 35, WHITE, "+1", gameWindow->renderer));
-    clickText->Disable();
+    //GameObjectFactory::Disable(clickText);
     std::shared_ptr<TextPool> clickTextPool(new TextPool(clickText, textFactory, 100));
     std::shared_ptr<ClickVFX> clickVFX(new ClickVFX(clickTextPool, 100));
     
@@ -159,15 +163,15 @@ int main(int argc, char* args[])
         gameWindow->Clear();
 
         // Render all active game objects
-        for (std::shared_ptr<GameObject> activeGameObject : GameObject::ActiveGameObjects)
-        {
-            gameWindow->Render(activeGameObject);
-        }
+        // for (std::shared_ptr<GameObject> activeGameObject : GoFactory->ActiveGameObjects)
+        // {
+        //     gameWindow->Render(activeGameObject);
+        // }
 
 
         //cube rain, and cuberain amt calc
-        int cubeRainLimit = static_cast<int>(std::round(static_cast<double>(currentCps) / 50.0));
-        cubeRain->Update(rainObjPool, cubeRainLimit);
+       // int cubeRainLimit = static_cast<int>(std::round(static_cast<double>(currentCps) / 50.0));
+        //cubeRain->Update(rainObjPool, cubeRainLimit);
         clickVFX->Update();
 
         cursor->UpdateCursor();

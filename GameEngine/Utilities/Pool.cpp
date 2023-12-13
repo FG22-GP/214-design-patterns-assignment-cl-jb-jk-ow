@@ -1,30 +1,28 @@
 #include "Pool.h"
 
-#include "Consts.h"
-#include "ImageURLs.h"
 #include "MathUtils.h"
 #include "../Image/Image.h"
 
-Pool::Pool(std::shared_ptr<Image> image, int poolSize) {
+Pool::Pool(std::shared_ptr<Image> image, int poolSize, std::shared_ptr<GameObjectFactory> goFactory){
     for (int i = 0; i < poolSize; i++) {
-        Image* img = new Image(image->CurrentTransform, image->GetImageURL(), image->GetRenderer(), MathUtils::GetRandomColor());
+        std::shared_ptr<Image> img = goFactory->ConstructGameObject(new Image(image->CurrentTransform, image->GetImageURL(), image->GetRenderer(), MathUtils::GetRandomColor()));
         ObjectPool.push(img);
-        img->Disable();
+        GameObjectFactory::Disable(img);
     }
     currentActiveObjects = 0;
 }
 
-GameObject* Pool::PoolGetObject() {
+std::shared_ptr<GameObject> Pool::PoolGetObject() {
     if (ObjectPool.empty()) return nullptr;
-    GameObject* FrontObj = ObjectPool.front();
+    std::shared_ptr<GameObject> FrontObj = ObjectPool.front();
     ObjectPool.pop();
     currentActiveObjects += 1;
     FrontObj->poolObjSpeed = MathUtils::GetRandomInt(1, 3);
     return FrontObj;
 }
 
-void Pool::PoolReturnObject(GameObject* gameObject) {
-    gameObject->Disable();
+void Pool::PoolReturnObject(std::shared_ptr<GameObject> gameObject) {
+    GameObjectFactory::Disable(gameObject);
     ObjectPool.push(gameObject);
     currentActiveObjects -= 1;
 }

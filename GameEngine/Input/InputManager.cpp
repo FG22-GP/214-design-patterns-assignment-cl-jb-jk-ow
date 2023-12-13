@@ -3,6 +3,7 @@
 #include "../Image/Image.h"
 #include "../Text/Text.h"
 #include "../Utilities/GameObject.h"
+#include "../Utilities/GameObjectFactory.h"
 #include "../Utilities/Intersection.h"
 #include "../Utilities/GameState.h"
 #include "../Utilities/Item.h"
@@ -116,7 +117,7 @@ void InputManager::OnKeyRelease(SDL_Scancode key) {
 }
 
 void InputManager::HandleItemClick(GameState* gameState) {
-    Item* clickedItem = Intersection::GetClickedItem(GameObject::ActiveGameObjects, GetClickPos());
+    Item* clickedItem = Intersection::GetClickedItem(GameObjectFactory::ActiveGameObjects, GetClickPos());
     if (clickedItem && clickedItem != nullptr) {
         if (gameState->CubeCount >= clickedItem->GetItemCost()) {
             gameState->CubeCount -= clickedItem->GetItemCost();

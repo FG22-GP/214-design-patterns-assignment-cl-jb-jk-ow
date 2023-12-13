@@ -1,30 +1,31 @@
 #include "TextPool.h"
 
+#include "GameObjectFactory.h"
 #include "MathUtils.h"
 
 TextPool::TextPool(std::shared_ptr<Text> text, std::shared_ptr<TextFactory> textFactory, int poolSize)
 {
     for (int i = 0; i < poolSize; i++) {
-        Text* txt = new Text(text->CurrentTransform.Position, textFactory, text->GetTextURL(), text->fontSize, text->color, text->text, text->GetRenderer());
+        std::shared_ptr<Text> txt(new Text(text->CurrentTransform.Position, textFactory, text->GetTextURL(), text->fontSize, text->color, text->text, text->GetRenderer()));
         ObjectPool.push(txt);
-        txt->Disable();
+        GameObjectFactory::Disable(txt);
     }
     currentActiveObjects = 0;
 }
 
-GameObject* TextPool::PoolGetObject()
+std::shared_ptr<Text> TextPool::PoolGetObject()
 {
     if (ObjectPool.empty()) return nullptr;
-    GameObject* frontObj = ObjectPool.front();
+    std::shared_ptr<Text> frontObj = ObjectPool.front();
     ObjectPool.pop();
     currentActiveObjects += 1;
     frontObj->poolObjSpeed = MathUtils::GetRandomInt(1, 3);
     return frontObj;
 }
 
-void TextPool::PoolReturnObject(GameObject* gameObject)
+void TextPool::PoolReturnObject(std::shared_ptr<Text> gameObject)
 {
-    gameObject->Disable();
+    GameObjectFactory::Disable(gameObject);
     ObjectPool.push(gameObject);
     currentActiveObjects -= 1;
 }

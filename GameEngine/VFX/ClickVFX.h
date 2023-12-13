@@ -2,6 +2,7 @@
 #include <memory>
 #include <vector>
 
+#include "../Text/Text.h"
 #include "../Utilities/IClickObserver.h"
 
 class TextPool;
@@ -20,7 +21,7 @@ public:
 
     void OnClick();
 
-    vector<GameObject*> ActivePoolObjects;
+    vector<std::shared_ptr<Text>> ActivePoolObjects;
 
 private:
     TextPool* pool;
