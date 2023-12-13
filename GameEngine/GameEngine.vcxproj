@@ -27,6 +27,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConcreteObjects\CubeButton.cpp" />
+    <ClCompile Include="ConcreteObjects\SaveButton.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Text\Text.cpp" />
     <ClCompile Include="game.cpp" />
@@ -36,6 +38,7 @@
     <ClCompile Include="Utilities\CubeRain.cpp" />
     <ClCompile Include="Utilities\Cursor.cpp" />
     <ClCompile Include="Utilities\GameObject.cpp" />
+    <ClCompile Include="Utilities\GameState.cpp" />
     <ClCompile Include="Utilities\IClickObserver.cpp" />
     <ClCompile Include="Utilities\Intersection.cpp" />
     <ClCompile Include="Utilities\IObservable.cpp" />
@@ -133,6 +136,8 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConcreteObjects\CubeButton.h" />
+    <ClInclude Include="ConcreteObjects\SaveButton.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Text\Text.h" />
     <ClInclude Include="Image\Image.h" />

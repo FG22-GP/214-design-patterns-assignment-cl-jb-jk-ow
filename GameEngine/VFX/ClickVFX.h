@@ -22,6 +22,8 @@ public:
 
     vector<GameObject*> ActivePoolObjects;
 
+    SDL_Rect* GetRect() override;
+
 private:
     TextPool* pool;
     int limit;

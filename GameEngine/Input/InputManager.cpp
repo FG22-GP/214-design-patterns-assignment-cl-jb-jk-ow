@@ -4,7 +4,6 @@
 #include "../Text/Text.h"
 #include "../Utilities/GameObject.h"
 #include "../Utilities/Intersection.h"
-#include "../Utilities/GameState.h"
 #include "../Utilities/Item.h"
 #include "../Utilities/MathUtils.h"
 #include "../Utilities/SaveGameUtils.h"
@@ -34,11 +33,6 @@ void InputManager::Update() {
 
     // Update mouse state
     SDL_GetMouseState(&mouseX, &mouseY);
-
-    if(IsKeyPressed(SDL_SCANCODE_S))
-    {
-        SaveGameUtils::SaveGame(*gameState);
-    }
 }
 
 bool InputManager::IsKeyPressed(SDL_Scancode key) const {
@@ -80,19 +74,19 @@ void InputManager::OnMouseButtonRelease(Uint8 button)
     {
         HandleItemClick(gameState);
 
-        for (const auto& clickablePair : clickables)
+        for (const auto& [first, second] : observers)
         {
-            if (Intersection::IntersectionMouseRect(clickablePair.first->Rect, { mouseX, mouseY })) {
+            if (Intersection::IntersectionMouseRect(second->GetRect(), { mouseX, mouseY })) {
                 // Handle the click based on the type of GameObject
-                if (clickablePair.second == "cube_button")
+                if (first == "cube_button")
                 {
-                    HandleCubeClick(gameState);
-                    dynamic_cast<Image*>(clickablePair.first.get())->SetColor(MathUtils::GetRandomColor());
+                    dynamic_cast<Image*>(second.get())->SetColor(MathUtils::GetRandomColor());
                     NotifyObserver("click_vfx");
+                    NotifyObserver("cube_button");
                     
                     break;
                 }
-                if (clickablePair.second == "save_button")
+                if (first == "save_button")
                 {
                     HandleSaveClick(gameState);
                     break; 
@@ -118,8 +112,8 @@ void InputManager::OnKeyRelease(SDL_Scancode key) {
 void InputManager::HandleItemClick(GameState* gameState) {
     Item* clickedItem = Intersection::GetClickedItem(GameObject::ActiveGameObjects, GetClickPos());
     if (clickedItem && clickedItem != nullptr) {
-        if (gameState->CubeCount >= clickedItem->GetItemCost()) {
-            gameState->CubeCount -= clickedItem->GetItemCost();
+        if (GameState::CubeCount >= clickedItem->GetItemCost()) {
+            GameState::CubeCount -= clickedItem->GetItemCost();
             clickedItem->BuyItem(1);
             gameState->UpdateItem(clickedItem);
         }
@@ -128,7 +122,7 @@ void InputManager::HandleItemClick(GameState* gameState) {
 
 void InputManager::HandleCubeClick(GameState* gameState)
 {
-    gameState->CubeCount++;
+    GameState::AddToCubeCount(1);
 }
 
 void InputManager::HandleSaveClick(GameState* gameState)
@@ -136,7 +130,7 @@ void InputManager::HandleSaveClick(GameState* gameState)
     SaveGameUtils::SaveGame(*gameState);
 }
 
-void InputManager::AddClickable(std::shared_ptr<GameObject> clickable, std::string name)
+void InputManager::AddClickable(std::shared_ptr<GameObject> clickable, const std::string& name)
 {
     clickables.emplace(clickable, name);
 }
@@ -153,7 +147,7 @@ void InputManager::RemoveObserver(const std::string& id)
 
 void InputManager::NotifyObserver(const std::string& id)
 {
-    auto it = observers.find(id);
+    const auto it = observers.find(id);
     if (it != observers.end())
     {
         it->second->OnNotify();
@@ -162,7 +156,7 @@ void InputManager::NotifyObserver(const std::string& id)
 
 void InputManager::NotifyAll()
 {
-    for(auto observer : observers)
+    for(const auto observer : observers)
     {
         observer.second->OnNotify();
     }

@@ -54,3 +54,8 @@ void ClickVFX::OnClick()
         }
     }
 }
+
+SDL_Rect* ClickVFX::GetRect()
+{
+    return {};
+}

@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "ConcreteObjects/CubeButton.h"
+#include "ConcreteObjects/SaveButton.h"
 #include "Text/Text.h"
 #include "Utilities/Consts.h"
 #include "Utilities/ImageURLs.h"
@@ -18,7 +20,6 @@
 #include "Utilities/SaveGameUtils.h"
 #include "Utilities/Shop.h"
 #include "Utilities/CubeRain.h"
-#include "Utilities/Intersection.h"
 #include "Utilities/ItemFactory.h"
 #include "Utilities/MathUtils.h"
 #include "Utilities/SDLUtils.h"
@@ -60,13 +61,13 @@ int main(int argc, char* args[])
     std::shared_ptr<TextPool> clickTextPool(new TextPool(clickText, textFactory, 100));
     std::shared_ptr<ClickVFX> clickVFX(new ClickVFX(clickTextPool, 100));
     
-    std::shared_ptr<Image> cubeImage(new Image(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer, WHITE));
+    std::shared_ptr<CubeButton> cubeButton(new CubeButton(Transform(Vector2(180, WINDOW_CENTER_Y - 200), Vector2(400, 400)), IMG_CUBE_URL, gameWindow->renderer, WHITE));
     std::shared_ptr<Image> currencyCubeImage(new Image(Transform(Vector2(15, 15), Vector2(70, 70)), IMG_SMALLCUBE_URL, gameWindow->renderer, WHITE));
     std::shared_ptr<Image> cpsCubeImage(new Image(Transform(Vector2(300, 590), Vector2(45, 45)), IMG_SMALLCUBE_URL, gameWindow->renderer, WHITE));
     std::shared_ptr<Text> currencyText(new Text(Vector2(100, 25), textFactory, FONT_FUTURAMEDIUM_URL, 40, WHITE, " ", gameWindow->renderer)); //text is a space
     std::shared_ptr<Text> cpsText(new Text(Vector2(350, 595), textFactory, FONT_FUTURAMEDIUM_URL, 30, WHITE, "512 k/cps", gameWindow->renderer));
-    std::shared_ptr<Text> saveText(new Text(Vector2(25, WINDOW_HEIGHT - 80), textFactory, FONT_FUTURAMEDIUM_URL, 30, WHITE, "Save Game", gameWindow->renderer));
-    saveText->SetBackgroundColor(50, 50, 50, 1);
+    std::shared_ptr<SaveButton> saveButton(new SaveButton(Vector2(25, WINDOW_HEIGHT - 80), textFactory, FONT_FUTURAMEDIUM_URL, 30, WHITE, "Save Game", gameWindow->renderer));
+    saveButton->SetBackgroundColor(50, 50, 50, 1);
     
     //Create Shop & Items
     std::unique_ptr<Image> squareMartBackgroundImage(new Image(Transform(Vector2(780, -10), Vector2(250, 800)), IMG_SQUAREMART_URL, gameWindow->renderer, WHITE));
@@ -86,8 +87,8 @@ int main(int argc, char* args[])
 
     // Create InputManager
     InputManager inputManager(&gameState);
-    inputManager.AddClickable(saveText, "save_button");
-    inputManager.AddClickable(cubeImage, "cube_button");
+    inputManager.AddObserver("save_button", saveButton);
+    inputManager.AddObserver("cube_button", cubeButton);
     inputManager.AddObserver("click_vfx", clickVFX);
 
     SDL_Event e;
@@ -111,6 +112,11 @@ int main(int argc, char* args[])
                 case SDL_KEYDOWN: {
                     // Handle key press event
                     inputManager.OnKeyPress(e.key.keysym.scancode);
+                        if(e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+                        {
+                            SaveGameUtils::SaveGame(gameState);
+                            quit = true;
+                        }
                 } break;
 
                 case SDL_KEYUP: {

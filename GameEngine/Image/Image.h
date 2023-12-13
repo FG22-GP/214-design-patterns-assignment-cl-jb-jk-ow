@@ -5,7 +5,7 @@
 
 class Image : public GameObject
 {
-private:
+protected:
     SDL_Renderer* Renderer;
 
     const char* URL;

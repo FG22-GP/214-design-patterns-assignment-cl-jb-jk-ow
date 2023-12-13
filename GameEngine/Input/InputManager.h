@@ -59,7 +59,7 @@ public:
 
     void HandleSaveClick(GameState* gameState);
 
-    void AddClickable(std::shared_ptr<GameObject> clickable, std::string name);
+    void AddClickable(std::shared_ptr<GameObject> clickable, const std::string& name);
 
     //IObservable
     void AddObserver(const std::string& id, std::shared_ptr<IClickObserver> observer) override;

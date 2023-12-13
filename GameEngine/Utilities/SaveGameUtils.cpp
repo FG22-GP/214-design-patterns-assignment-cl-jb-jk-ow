@@ -13,7 +13,7 @@ void SaveGameUtils::SaveGame(const GameState& gameState) {
     std::ofstream file(filePath, std::ios::out | std::ios::binary);
     
     if (file.is_open()) {
-        file << std::string("CubeCount: ") << gameState.CubeCount << "\n";
+        file << std::string("CubeCount: ") << GameState::CubeCount << "\n";
 
         // Iterate over the vector of items and save their information
         for (const auto& tuple : gameState.AutoClickers) {
@@ -38,7 +38,7 @@ GameState SaveGameUtils::LoadGame(std::vector<std::shared_ptr<Item>>& items) {
         while (std::getline(stream, line)) {
             // Parse the line and update the GameState object
             if (line.find("CubeCount: ") != std::string::npos) {
-                gameState.CubeCount = std::stoi(line.substr(line.find(": ") + 2));
+                GameState::CubeCount = std::stoi(line.substr(line.find(": ") + 2));
             }
             else if(line.find(": "))
             {
@@ -56,7 +56,7 @@ GameState SaveGameUtils::LoadGame(std::vector<std::shared_ptr<Item>>& items) {
                 }
             }
         }
-
+        GameState::Instance = &gameState;
         stream.close();
         std::cout << "Game state loaded successfully from: " << filePath << "\n";
         return gameState;
