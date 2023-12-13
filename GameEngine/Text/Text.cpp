@@ -31,8 +31,10 @@ void Text::SetText(const char* NewText)
 }
 
 void Text::SetBackgroundColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
-    SDL_Color* NewColor = new SDL_Color{r, g, b, a};
-    backgroundColor = NewColor;
+    backgroundColor->r = r;
+    backgroundColor->g = g;
+    backgroundColor->b = b;
+    backgroundColor->a = a;
     RefreshText();
 }
 
