@@ -26,7 +26,7 @@ void ClickVFX::Update() {
     for (GameObject* activePoolObj : ActivePoolObjects) {
         int xPos = activePoolObj->CurrentTransform.Position.X;
         int YPos = activePoolObj->CurrentTransform.Position.Y;
-        if (YPos >= WINDOW_HEIGHT) {
+        if (YPos <= 0) {
             pool->PoolReturnObject(activePoolObj);
             ActivePoolObjects.erase(std::remove_if(ActivePoolObjects.begin(), ActivePoolObjects.end(),
                                 [&activePoolObj](const GameObject* obj) {
