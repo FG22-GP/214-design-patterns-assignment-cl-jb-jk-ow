@@ -28,6 +28,7 @@ void CubeRain::Update(std::shared_ptr<Pool> poolToUpdate, int currentSpawnLimit)
 
         if (yPos >= WINDOW_HEIGHT) {
             poolToUpdate->PoolReturnObject(activePoolObj);
+            printf("returned");
             objectsToRemove.push_back(activePoolObj);
         } else {
             activePoolObj->SetPosition(Vector2(xPos, yPos + activePoolObj->poolObjSpeed));
@@ -38,4 +39,5 @@ void CubeRain::Update(std::shared_ptr<Pool> poolToUpdate, int currentSpawnLimit)
         ActivePoolObjects.erase(std::remove(ActivePoolObjects.begin(), ActivePoolObjects.end(), objToRemove),
                                 ActivePoolObjects.end());
     }
+    objectsToRemove.clear();
 }
