@@ -32,7 +32,7 @@ public:
 
     void SetPosition(Vector2 position);
     
-    static std::vector<std::shared_ptr<GameObject>> ActiveGameObjects;
+    static std::vector<GameObject*> ActiveGameObjects;
     SDL_Texture* Texture;
     SDL_Rect* Rect;
     Transform CurrentTransform;

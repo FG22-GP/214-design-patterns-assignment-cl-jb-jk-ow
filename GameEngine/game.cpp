@@ -159,7 +159,7 @@ int main(int argc, char* args[])
         gameWindow->Clear();
 
         // Render all active game objects
-        for (std::shared_ptr<GameObject> activeGameObject : GameObject::ActiveGameObjects)
+        for (GameObject* activeGameObject : GameObject::ActiveGameObjects)
         {
             gameWindow->Render(activeGameObject);
         }
