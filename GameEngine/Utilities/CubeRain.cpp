@@ -2,14 +2,17 @@
 #include "Consts.h"
 #include "MathUtils.h"
 
+std::vector<std::shared_ptr<GameObject>> objectsToRemove;
 
 CubeRain::CubeRain() {
 }
 
+
+
 void CubeRain::Update(std::shared_ptr<Pool> poolToUpdate, int currentSpawnLimit) {
     //printf("current active: %d\n", poolToUpdate->currentActiveObjects);
     if (poolToUpdate->currentActiveObjects < currentSpawnLimit) {
-        GameObject* Obj = poolToUpdate->PoolGetObject();
+        std::shared_ptr<GameObject> Obj = poolToUpdate->PoolGetObject();
         if (Obj != nullptr) {
             int RandomXPos = MathUtils::GetRandomInt(630, WINDOW_WIDTH - 300);
             int RandomYPos = MathUtils::GetRandomInt(20, 800);
@@ -18,20 +21,21 @@ void CubeRain::Update(std::shared_ptr<Pool> poolToUpdate, int currentSpawnLimit)
             ActivePoolObjects.push_back(Obj);
         }
     }
-
-    for (GameObject* activePoolObj : ActivePoolObjects) {
+    
+    for (auto& activePoolObj : ActivePoolObjects) {
         int xPos = activePoolObj->CurrentTransform.Position.X;
-        int YPos = activePoolObj->CurrentTransform.Position.Y;
-        if (YPos >= WINDOW_HEIGHT) {
+        int yPos = activePoolObj->CurrentTransform.Position.Y;
+
+        if (yPos >= WINDOW_HEIGHT) {
             poolToUpdate->PoolReturnObject(activePoolObj);
-            ActivePoolObjects.erase(std::remove_if(ActivePoolObjects.begin(), ActivePoolObjects.end(),
-                                [&activePoolObj](const GameObject* obj) {
-                                    return obj == activePoolObj;
-                                }),
-                 ActivePoolObjects.end());
+            objectsToRemove.push_back(activePoolObj);
+        } else {
+            activePoolObj->SetPosition(Vector2(xPos, yPos + activePoolObj->poolObjSpeed));
         }
-        else {
-            activePoolObj->SetPosition(Vector2(xPos, YPos + activePoolObj->poolObjSpeed));
-        }
+    }
+
+    for (const auto& objToRemove : objectsToRemove) {
+        ActivePoolObjects.erase(std::remove(ActivePoolObjects.begin(), ActivePoolObjects.end(), objToRemove),
+                                ActivePoolObjects.end());
     }
 }

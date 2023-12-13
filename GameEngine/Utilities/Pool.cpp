@@ -7,23 +7,24 @@
 
 Pool::Pool(std::shared_ptr<Image> image, int poolSize) {
     for (int i = 0; i < poolSize; i++) {
-        Image* img = new Image(image->CurrentTransform, image->GetImageURL(), image->GetRenderer(), MathUtils::GetRandomColor());
+        auto img = std::make_shared<Image>(image->CurrentTransform, image->GetImageURL(), image->GetRenderer(), MathUtils::GetRandomColor());
         ObjectPool.push(img);
         img->Disable();
     }
     currentActiveObjects = 0;
 }
 
-GameObject* Pool::PoolGetObject() {
+
+std::shared_ptr<GameObject> Pool::PoolGetObject() {
     if (ObjectPool.empty()) return nullptr;
-    GameObject* FrontObj = ObjectPool.front();
+    std::shared_ptr<GameObject> FrontObj = ObjectPool.front();
     ObjectPool.pop();
     currentActiveObjects += 1;
     FrontObj->poolObjSpeed = MathUtils::GetRandomInt(1, 3);
     return FrontObj;
 }
 
-void Pool::PoolReturnObject(GameObject* gameObject) {
+void Pool::PoolReturnObject(std::shared_ptr<GameObject> gameObject) {
     gameObject->Disable();
     ObjectPool.push(gameObject);
     currentActiveObjects -= 1;
