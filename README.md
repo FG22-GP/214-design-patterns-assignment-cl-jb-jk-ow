@@ -16,6 +16,7 @@ These effects included click feedback ([ClickVFX.h](https://github.com/FG22-GP/2
 
 ### Observer Pattern
 
+To manage references in a modular fashion, we used the observer pattern.
 The input manager ([InputManager.h](https://github.com/FG22-GP/214-design-patterns-assignment-cl-jb-jk-ow/blob/main/GameEngine/Input/InputManager.h)) keeps a vector of observers ([IObservable.h](https://github.com/FG22-GP/214-design-patterns-assignment-cl-jb-jk-ow/blob/main/GameEngine/Utilities/IObservable.h)) and their unique ids.
 The input manager can then notify a set of observers.
 The observers being notified will then call their implementation of OnNotify which is specific to the individual observer-derived classes.
