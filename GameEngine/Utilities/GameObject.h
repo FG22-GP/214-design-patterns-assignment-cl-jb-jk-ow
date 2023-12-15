@@ -25,18 +25,17 @@ public:
     
     ~GameObject();
 
-    Item* Item;
     void Enable();
     void Disable();
     virtual void Update();
 
     void SetPosition(Vector2 position);
-    
+    void SetItemReference(::Item* item);
+
     static std::vector<GameObject*> ActiveGameObjects;
+    Item* Item;
     SDL_Texture* Texture;
     SDL_Rect* Rect;
     Transform CurrentTransform;
     int poolObjSpeed;
-
-    void SetItemReference(::Item* item);
 };
