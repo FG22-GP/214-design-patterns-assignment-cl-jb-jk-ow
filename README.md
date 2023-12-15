@@ -12,3 +12,8 @@ The input manager ([InputManager.h](https://github.com/FG22-GP/214-design-patter
 The input manager can then notify a set of observers.
 The observers being notified will then call their implementation of OnNotify which is specific to the individual observer-derived classes.
 For example, cube button ([CubeButton.cpp](https://github.com/FG22-GP/214-design-patterns-assignment-cl-jb-jk-ow/blob/main/GameEngine/ConcreteObjects/CubeButton.cpp)) inherits from the click observer class ([IClickObserver.h](https://github.com/FG22-GP/214-design-patterns-assignment-cl-jb-jk-ow/blob/main/GameEngine/Utilities/IClickObserver.h)).
+
+## Screenshots
+<img alt="Screenshot before" width="503" src="https://github.com/FG22-GP/214-design-patterns-assignment-cl-jb-jk-ow/blob/main/Screenshots/square-clicker-0.png"/>
+<img alt="Screenshot after" width="503" src="https://github.com/FG22-GP/214-design-patterns-assignment-cl-jb-jk-ow/blob/main/Screenshots/square-clicker-1.png"/>
+<img alt="Gameplay gif" width="503" src="https://github.com/FG22-GP/214-design-patterns-assignment-cl-jb-jk-ow/blob/main/Screenshots/square-clicker.gif"/>
